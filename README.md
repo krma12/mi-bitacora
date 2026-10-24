@@ -35,12 +35,14 @@ Al final la historia vuelve al papel, con una carta a mi yo de 2018.
 
 ##  Qué tiene
 
-- **Mapa interactivo** ([Leaflet](https://leafletjs.com/)): la ruta CDMX → Caribe → Nueva York → CDMX se dibuja sola, con botones para hacer zoom a cada etapa.
+- **Mapa interactivo** ([Leaflet](https://leafletjs.com/)): la ruta CDMX → Caribe → Nueva York → CDMX se dibuja sola, con botones para hacer zoom a cada etapa. Al hacer clic en un lugar, su nota dice si ahí viví, si lo visité o si ahí tengo amigos.
 - **Galerías automáticas**: cada sección lee sus fotos de una carpeta, sin tocar el HTML.
 - **Contadores animados**: algunos números se calculan solos, como los años, los lugares del mapa y los capítulos.
 - **Menú que sigue tu lectura**: marca el capítulo actual y se oscurece al llegar a la parte de terminal.
 - **Animaciones al hacer scroll**, barra de progreso, efecto *glitch* y máquina de escribir.
 - **Diseño responsive**, pensado primero para celular.
+- **Vista previa al compartir**: etiquetas Open Graph con imagen, título y descripción para que el link se vea bien en WhatsApp, LinkedIn, Facebook y X.
+- **Ícono propio** en la pestaña del navegador (`favicon.svg`).
 - **Accesibilidad básica**: se respeta `prefers-reduced-motion`, los botones tienen foco visible y las fotos llevan texto alternativo.
 
 **Tecnologías:** HTML5 · CSS3 (variables, grid, flexbox, animaciones) · JavaScript (IntersectionObserver, promesas) · Leaflet
@@ -54,6 +56,8 @@ mi-bitacora/
 ├── script.js         → animaciones, menú y galerías automáticas
 ├── mapa.js           → lógica del mapa y de los contadores
 ├── mapa-datos.js     → lugares del mapa (aquí se agregan nuevos)
+├── favicon.svg       → ícono de la pestaña
+├── vista-previa.jpg  → imagen que aparece al compartir el link (1200 × 630)
 └── img/              → una carpeta de fotos por sección
     ├── veterinaria/
     ├── playa_del_carmen/
@@ -77,6 +81,8 @@ mi-bitacora/
 ```
 
 **Marcar una meta cumplida:** en el capítulo 10, cambia `[ ]` por `[✓]`.
+
+**Cambiar la vista previa del link:** reemplaza `vista-previa.jpg` por otra imagen de 1200 × 630 px con el mismo nombre. El título y la descripción están en las etiquetas `og:` del `<head>` de `index.html`. Para comprobar cómo se ve, usa [opengraph.xyz](https://www.opengraph.xyz/) o el [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/). WhatsApp guarda la vista previa anterior por un tiempo, así que puede tardar en actualizarse.
 
 ## 💻 Verla en tu computadora
 
