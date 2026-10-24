@@ -68,7 +68,8 @@ a { color: inherit; }
     letter-spacing: -.03em;
 }
 .portada h1 em { font-weight: 300; font-style: italic; color: #c8553d; }
-.portada-sub { font-size: 1.25rem; color: var(--tinta-suave); max-width: 30ch; }
+.portada-sub { font-size: 1.25rem; color: var(--tinta-suave); max-width: 34ch; text-wrap: balance; }
+.portada-sub span { display: block; margin-top: .5rem; font-style: italic; }
 .portada-flecha {
     margin-top: 2.5rem; align-self: flex-start;
     font-family: var(--mano); font-size: 1.6rem; text-decoration: none;
