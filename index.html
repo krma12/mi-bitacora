@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitácora · Hugo Maldonado</title>
+    <meta name="description" content="Mi camino de la veterinaria a la inteligencia artificial, capítulo por capítulo.">
+
+    <!-- Tipografías: Fraunces (diario), Caveat (notas a mano), JetBrains Mono (terminal) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Leaflet: librería para el mapa interactivo -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Barra de progreso: se llena conforme bajas (la mueve script.js) -->
+    <div class="progreso" aria-hidden="true"><span id="barra"></span></div>
+
+    <!-- ============ PORTADA ============ -->
+    <header class="portada">
+        <p class="portada-etiqueta">Bitácora personal · 2018 — hoy</p>
+        <h1>Hugo<br><em>Maldonado</em></h1>
+        <p class="portada-sub">
+            De la veterinaria a la inteligencia artificial,<br>pasando por el Caribe y Nueva York.<br>
+            El camino, entrada por entrada.
+        </p>
+        <a href="#cap-1" class="portada-flecha">Abrir el diario ↓</a>
+    </header>
+
+    <!-- ============ ÍNDICE (menú) ============ -->
+    <nav class="indice" aria-label="Capítulos">
+        <a href="#cap-0"><span>00</span> El mapa</a>
+        <a href="#cap-1"><span>01</span> La bata blanca</a>
+        <a href="#cap-2"><span>02</span> Rumbo al Caribe</a>
+        <a href="#cap-3"><span>03</span> Nueva York</a>
+        <a href="#cap-4"><span>04</span> Emprender</a>
+        <a href="#cap-5"><span>05</span> Las palabras</a>
+        <a href="#cap-6"><span>06</span> Volver a estudiar</a>
+        <a href="#cap-7"><span>07</span> Con las manos</a>
+        <a href="#cap-8"><span>08</span> Disciplina</a>
+        <a href="#cap-9"><span>09</span> Construir</a>
+        <a href="#cap-10"><span>10</span> Lo que viene</a>
+        <a href="#carta"><span>✉</span> Carta</a>
+    </nav>
+
+    <main>
+
+        <!-- ============ PRÓLOGO · EN NÚMEROS + MAPA ============ -->
+        <section class="capitulo papel prologo" id="cap-0" style="--acento: #c8553d;">
+
+            <!-- Franja de números: data-contar = número fijo, o una palabra que se calcula en mapa.js
+                 (anios, lugares, capitulos) -->
+            <ul class="numeros">
+                <li><b data-contar="anios">0</b><span>años de historia</span></li>
+                <li><b data-contar="2">0</b><span>países</span></li>
+                <li><b data-contar="lugares">0</b><span>lugares en el mapa</span></li>
+                <li><b data-contar="6">0</b><span>idiomas en el camino</span></li>
+                <li><b data-contar="capitulos">0</b><span>capítulos</span></li>
+            </ul>
+
+            <div class="cap-cabecera">
+                <span class="cap-num">Prólogo</span>
+                <h2>El mapa</h2>
+                <p class="cap-fecha">Cada punto es un lugar que me cambió algo · 2018 — hoy</p>
+            </div>
+
+            <div class="mapa-botones">
+                <button type="button" data-enfocar="todo" class="activo">Todo el recorrido</button>
+                <button type="button" data-enfocar="caribe" style="--c:#1f8a8a">Caribe</button>
+                <button type="button" data-enfocar="nuevayork" style="--c:#a63d6b">Nueva York</button>
+                <button type="button" data-enfocar="nyc" style="--c:#a63d6b">Manhattan y Bronx</button>
+                <button type="button" data-enfocar="cdmx" style="--c:#5b7f5a">CDMX</button>
+                <button type="button" data-enfocar="repetir">↻ Repetir</button>
+            </div>
+
+            <div class="mapa-marco">
+                <div id="mapa" aria-label="Mapa interactivo de mi recorrido"></div>
+            </div>
+            <p class="mapa-leyenda"><span class="linea-solida"></span> trayecto corto · <span class="linea-vuelo"></span> trayecto largo</p>
+
+            <!-- La lista se genera sola a partir de mapa-datos.js -->
+            <div class="mapa-lista" id="mapa-lista"></div>
+        </section>
+
+        <!-- ============ CAPÍTULO 1 · estilo PAPEL ============ -->
+        <!-- --acento cambia el color de cada capítulo -->
+        <section class="capitulo papel" id="cap-1" style="--acento: #5b7f5a;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 01</span>
+                <h2>La bata blanca</h2>
+                <p class="cap-fecha">2018 — 2020 · UVM</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2018</p>
+                    <h3>Estudiar Medicina Veterinaria</h3>
+                    <p>
+                        Elegí veterinaria porque siempre me han gustado los animales. Siempre he pensado
+                        que nuestro trabajo como humanos es proteger el medio ambiente y a los seres que
+                        son vulnerables ante nosotros: ser los protectores del planeta.
+                    </p>
+                    <blockquote class="cita">“Una ciencia de la salud enfocada en todo ser vivo es lo más noble que puede haber.”</blockquote>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2018 — 2020</p>
+                    <h3>El caballo</h3>
+                    <p>
+                        De esos años, lo que más recuerdo es haber acariciado un caballo. Para mí son los
+                        animales más nobles y, al mismo tiempo, los más imponentes. Junto con los perros,
+                        son los que más nos han acompañado en el progreso de nuestra especie.
+                    </p>
+                    <p class="aprendi">
+                        Lo que aprendí: la veterinaria es una carrera humana en el sentido más filosófico.
+                        Consciente o inconscientemente, muestra nuestro espíritu protector hacia el mundo,
+                        y exige un amor puro y fuerte hacia todo ser vivo.
+                    </p>
+
+                    <div class="galeria" data-carpeta="img/veterinaria" data-pies="">
+                        <!-- FOTOS: mete tus imágenes en img/veterinaria/ con nombres 1.jpg, 2.jpg, 3.jpg…
+                             La página las carga solas (script.js). Los recuadros grises solo se ven si la carpeta está vacía.
+                             Pies de foto: escríbelos en data-pies separados por | (ej. "Mi primer día|Prácticas") -->
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · el caballo</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · campus UVM</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · pacientes</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 2 · PAPEL ============ -->
+        <section class="capitulo papel" id="cap-2" style="--acento: #1f8a8a;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 02</span>
+                <h2>Rumbo al Caribe</h2>
+                <p class="cap-fecha">2020 — 2021 · Playa del Carmen, Q. Roo</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">Marzo 2020</p>
+                    <h3>Algo me dijo que iba a ser diferente</h3>
+                    <p>
+                        Desde que leí la primera noticia de la pandemia, algo me dijo que iba a ser importante.
+                        Lo ignoré y seguí estudiando, hasta que llegó la cuarentena y empecé a tomar clases en línea.
+                    </p>
+                    <p>
+                        Al principio me pareció muy agradable estudiar desde casa. Pero con el tiempo me deprimí:
+                        dejé de ver a mis amigos y mis calificaciones empezaron a bajar. No quise desperdiciar
+                        el tiempo, así que me di de baja temporal… que con los meses se volvió permanente.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2020</p>
+                    <h3>Me fui a vivir a Playa del Carmen</h3>
+                    <p>
+                        Ese mismo año me fui a Playa del Carmen con primos y familiares que viven allá:
+                        a trabajar, pero más que nada a vivir. Por primera vez experimenté lo que era vivir
+                        fuera de casa, lejos de mi familia y de la comida de mamá. Y al mismo tiempo pude
+                        acercarme a la familia que tengo allá.
+                    </p>
+                    <p>
+                        Ahí conocí a amigos de Estados Unidos que cambiaron mi vida para bien. Me ayudaron
+                        a encontrar lo que quería de mi vida, y también lo que no quería.
+                    </p>
+
+                    <!-- FOTOS: img/playa_del_carmen/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/playa_del_carmen" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · el mar</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Playa</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2020 — 2021</p>
+                    <h3>Una tarde en Tulum</h3>
+                    <p>
+                        Fui a Tulum con mi tía, mi primo y una amiga de Nueva York. Empezamos a tomar fotos
+                        por la zona y terminamos frente a la playa. Fue algo hermoso.
+                    </p>
+
+                    <!-- FOTOS: img/tulum/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/tulum" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Tulum</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · frente al mar</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2021</p>
+                    <h3>La invitación</h3>
+                    <p>Mis amigos me invitaron a visitar Nueva York. Y decidí irme.</p>
+                    <blockquote class="cita">“Todo puede cambiar en dos semanas. Imagínate lo que llegaría a cambiar en un mes.”</blockquote>
+                    <p class="aprendi">
+                        Lo que aprendí: esa frase me la repetía todo el tiempo, y fue la que me hizo ir a Nueva York.
+                        Y vaya que sí cambió todo para mí.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 3 · NUEVA YORK · PAPEL ============ -->
+        <section class="capitulo papel" id="cap-3" style="--acento: #a63d6b;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 03</span>
+                <h2>Nueva York</h2>
+                <p class="cap-fecha">2021 — 2024 · New York, NY</p> <!-- ✎ ¿terminó en 2023 o a inicios de 2024? -->
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2021</p>
+                    <h3>Llegar</h3>
+                    <p>
+                        Llegué con mucha ansiedad y mucha esperanza. Con muchas expectativas y con una gran confianza.
+                    </p>
+                    <p>
+                        Empecé en Rochester, porque ahí mis amigos me habían ofrecido llegar a trabajar en la
+                        construcción. Ahí pasé mi primer invierno…
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2021 — 2024</p>
+                    <h3>Trabajo, amigos e inglés</h3>
+                    <p>
+                        Estuve trabajando, pasando tiempo con mis amigos y amigas, y aprendiendo todo el inglés
+                        que podía, para desarrollarlo y algún día trabajar de eso.
+                    </p>
+                    <p>
+                        Una amiga estudiaba en City College, y a veces iba a buscarla. Otras veces salíamos a explorar:
+                        Manhattan, Little Italy en Lower Manhattan, el Bronx, Harlem y su Apollo Theater.
+                        Lugares maravillosos que jamás olvidaré. Estoy totalmente agradecido por las oportunidades
+                        y experiencias que me dieron mis amigos y amigas.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">125th Street</p>
+                    <h3>Harlem</h3>
+                    <p>
+                        Si tuviera que elegir un lugar, sería Harlem, en la calle 125: ver su cultura, su gente,
+                        y sentirme parte de esa historia. Me hizo ser mejor, mirar hacia el frente y hacia el futuro,
+                        y querer superarme cada día.
+                    </p>
+
+                    <!-- FOTOS: img/new_york/1.jpg, 2.jpg, 3.jpg… -->
+                    <div class="galeria" data-carpeta="img/new_york" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Harlem</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Manhattan</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Rochester</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">Lo que me llevé</p>
+                    <h3>Las personas</h3>
+                    <p>
+                        En nuestra vida conoceremos personas que siempre estarán en nuestro corazón,
+                        en nuestra mente y en nuestros recuerdos.
+                    </p>
+                    <blockquote class="cita">“Somos rompecabezas de las personas que nos importaron y conocimos. Lo único permanente es la impermanencia de la vida.”</blockquote>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 4 · PAPEL ============ -->
+        <section class="capitulo papel" id="cap-4" style="--acento: #c8553d;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 04</span>
+                <h2>Emprender</h2>
+                <p class="cap-fecha">2024 — 2025 · Restaurante La Nueva Atlántida · CDMX</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2024</p>
+                    <h3>El regreso</h3>
+                    <p>
+                        Uno siempre regresa a donde fue feliz. Y el que no arriesga, no gana.
+                    </p>
+                    <blockquote class="cita">“A veces es mejor decir que lo intentamos, que no decir nada porque jamás nos animamos a dar el primer paso.”</blockquote>
+                    <p>
+                        Por eso, un restaurante era el primer paso: el primer paso hacia un cambio, hacia algo
+                        diferente, hacia una vida de riesgos.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2024</p>
+                    <h3>El día de la apertura</h3>
+                    <p>
+                        La apertura de La Nueva Atlántida fue un día que jamás olvidaré.
+                    </p>
+                    <p>
+                        Fue un día de ánimos, de energías, de nerviosismo. Pero también de pasar el día y la noche
+                        con las personas que queremos, que nos apoyan y que nos quieren ver bien… y de disfrutar
+                        la compañía de los que no :)
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2024 — 2025</p>
+                    <h3>Un restaurante en familia</h3>
+                    <p>
+                        Lo que más recuerdo es el apoyo de mi familia: mi hermano preparando las bebidas,
+                        mi mamá disfrutando de sus clases de cocina en la cocina, mi papá poniendo la música…
+                        y yo viendo todo con una sonrisa.
+                    </p>
+
+                    <!-- FOTOS: img/restaurante/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/restaurante" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · el local</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · la familia</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · un platillo</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">2025</p>
+                    <h3>Cerrar un ciclo</h3>
+                    <p>La Nueva Atlántida cerró porque, de nuevo, nada dura para siempre :)</p>
+                    <p class="aprendi">
+                        Lo que aprendí: el que no arriesga, no gana. Vale más decir «lo intentamos»
+                        que quedarse sin dar el primer paso.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 5 · PAPEL ============ -->
+        <section class="capitulo papel" id="cap-5" style="--acento: #2f4e8c;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 05</span>
+                <h2>Las palabras</h2>
+                <p class="cap-fecha">Junio 2025 — hoy · Intérprete bilingüe</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">Junio 2025</p>
+                    <h3>Intérprete bilingüe</h3>
+                    <p>
+                        Cuando regresé, siempre tuve clara la idea de tener un trabajo que me permitiera trabajar
+                        cómodo y desde casa. En Nueva York había conocido a una persona que influyó mucho en mi vida
+                        y que me hizo incursionar en el mundo de la tecnología.
+                    </p>
+                    <p>
+                        Así que decidí usar a mi favor mi dominio del inglés y mi experiencia, para pagarme
+                        mis estudios y mis hobbies :)
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">La ventaja</p>
+                    <h3>El lenguaje médico</h3>
+                    <p>
+                        Esa persona trabajaba en data entry para el Memorial Sloan Kettering Cancer Center de Nueva York. Me enseñaba
+                        palabras, y con el tiempo que pasamos juntos y nuestras pláticas empecé a entender cierto
+                        lenguaje médico. Eso me dio una súper ventaja como intérprete.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">En curso</p>
+                    <h3>Seis idiomas en el camino</h3>
+                    <p>
+                        Además del español y el inglés, estoy aprendiendo portugués, francés, árabe y alemán.
+                        Quiero estar lo más preparado que pueda, usar las herramientas que tengo para hacer lo
+                        que no pude de joven, y hacer lo que más me gusta.
+                    </p>
+                    <blockquote class="cita">“Cada lenguaje tiene su propio mundo, su propia identidad, y quiero ser parte de eso.”</blockquote>
+                    <!-- Para cambiar un idioma de estado: usa la clase "domino" (lo domino) o "aprendo" (lo estoy aprendiendo) -->
+                    <ul class="idiomas">
+                        <li class="domino"><b>Español</b><small>nativo</small></li>
+                        <li class="domino"><b>English</b><small>profesional</small></li>
+                        <li class="aprendo"><b>Português</b><small>aprendiendo</small></li>
+                        <li class="aprendo"><b>Français</b><small>aprendiendo</small></li>
+                        <li class="aprendo"><b lang="ar">العربية</b><small>aprendiendo</small></li>
+                        <li class="aprendo"><b>Deutsch</b><small>aprendiendo</small></li>
+                    </ul>
+                    <p class="aprendi">
+                        Lo que viene: en mi futuro está vivir y convivir con personas para quienes es normal
+                        hablar más de cuatro idiomas. Y quiero estar a la altura.
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 6 · TRANSICIÓN (papel → terminal) ============ -->
+        <section class="capitulo transicion" id="cap-6" style="--acento: #7c5cd6;">
+            <div class="cap-cabecera">
+                <span class="cap-num">Capítulo 06</span>
+                <h2 class="glitch" data-texto="Volver a estudiar">Volver a estudiar</h2>
+                <p class="cap-fecha">2025 — hoy · Ingeniería en IA · Hybridge</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2025</p>
+                    <h3>¿Por qué inteligencia artificial?</h3>
+                    <p>
+                        El mundo cambió demasiado desde que me fui a Playa del Carmen. La IA no era lo que es hoy,
+                        y creo que el mundo va a seguir cambiando. Quise estudiar IA porque creo que puedo ser parte
+                        de ese cambio, sin olvidar quién soy ni lo que me gusta hacer.
+                    </p>
+                    <p>
+                        Además, para conseguir buenos trabajos y escalar se necesita ese papel, jaja. Así que, si ya me
+                        gustaba el área, si ya tenía conocimientos de código, interés y certificaciones en
+                        ciberseguridad… ¿por qué no aventarme a este nuevo desafío?
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">Cuatrimestre 1</p>
+                    <h3>Volver al aula</h3>
+                    <p>
+                        Fue muy diferente a mi experiencia en veterinaria. Difícil, complicado y hasta desafiante:
+                        estaba fuera de práctica, entre el trabajo y el estudio, y además estudiando otras cosas.
+                        Al inicio batallé para ordenarme y crear mi propio calendario, pero con el tiempo pude
+                        aclimatarme y adaptarme a este nuevo capítulo de mi vida.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">Cuatrimestres 2 y 3</p>
+                    <h3>Programación Orientada a Objetos</h3>
+                    <p>
+                        Debo admitir que POO fue desafiante, pero fue la materia que más me motivó a empezar
+                        a hacer proyectos para mi perfil de GitHub. Y estoy muy emocionado, porque cada vez
+                        estoy más cerca :)
+                    </p>
+                    <p class="aprendi">
+                        Lo que aprendí: estudiar una carrera requiere objetivos claros, metas claras y una visión
+                        específica de lo que quieres ser y a donde quieres llegar. Es un desafío que prueba
+                        tu compromiso y tu claridad, te dediques a eso o no.
+                    </p>
+
+                    <!-- FOTOS: img/cdmx_carrera/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/cdmx_carrera" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · Hybridge</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · mi setup</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 7 · PAPEL ============ -->
+        <section class="capitulo terminal fotos" id="cap-7" style="--acento: #d98a1f;">
+            <div class="cap-cabecera">
+                <span class="cap-num">// capítulo_07</span>
+                <h2>Hacer con las manos</h2>
+                <p class="cap-fecha">2026 — hoy · Impresión 3D</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2026</p>
+                    <h3>Un sueño de niño</h3>
+                    <p>
+                        Desde niño siempre quise una impresora 3D. Siempre quise tener la capacidad de crear
+                        y construir mis ideas. Y ahora que tengo la capacidad, el interés y la voluntad,
+                        me animé a hacer esa inversión.
+                    </p>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">primera_pieza → pieza_favorita</p>
+                    <h3>De una lamparita a Medusa</h3>
+                    <p>
+                        Mi primera pieza fue una lamparita tipo espiral: un poco graciosa a la vista, pero llamativa.
+                        Mi pieza favorita es un florero del busto de David y de Medusa. Creo que hasta ahora
+                        es mi mejor trabajo.
+                    </p>
+
+                    <!-- FOTOS: img/impresion_3d/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/impresion_3d" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · lamparita espiral</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · florero David</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · florero Medusa</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">¿hobby o negocio?</p>
+                    <h3>Un hobby que deja dinero</h3>
+                    <p>
+                        Sigue siendo un hobby. Dicen que un negocio no es negocio hasta que le pagas a alguien más,
+                        así que por ahora es un hobby que me deja dinero… y por supuesto, no tengo ninguna queja :)
+                    </p>
+                    <p class="cmd">open instagram.com/vxlmexico</p>
+                    <p class="salida"><a class="enlace-term" href="https://www.instagram.com/vxlmexico/" target="_blank" rel="noopener">→ ver mis piezas en @vxlmexico</a></p>
+                    <p class="aprendi">
+                        Lo que aprendí: paciencia y ganas de crear. A ser curioso y a seguir explorando.
+                        Creo que ese es el punto: si se dan las condiciones, ¿por qué no explorar ese camino?
+                    </p>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 8 · DISCIPLINA · TERMINAL ============ -->
+        <section class="capitulo terminal" id="cap-8" style="--acento: #e5534b;">
+            <div class="cap-cabecera">
+                <span class="cap-num">// capítulo_08</span>
+                <h2>Disciplina</h2>
+                <p class="cap-fecha">2024 — hoy · en paralelo a todo lo demás</p>
+            </div>
+
+            <div class="entradas">
+                <article class="entrada">
+                    <p class="entrada-fecha">2024 — hoy</p>
+                    <h3>El gimnasio</h3>
+                    <p>Desde 2024 voy al gimnasio y no lo he dejado. Aquí no daré mucha información, porque a veces es mejor guardar algunas cosas para uno mismo ;)</p>
+                    <p class="aprendi">Lo que aprendí:
+                        la constancia, la disciplina, la paciencia y la perseverancia para encontrar un equilibrio entre mente y cuerpo.
+                        A veces algo que parece simple y aburrido puede ser un gran reto si no se tiene la disciplina y la constancia para lograrlo.
+                    </p>
+
+                    <!-- FOTOS: img/gimnasio/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/gimnasio" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · gimnasio</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · progreso</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+
+                <article class="entrada">
+                    <p class="entrada-fecha">Junio 2026 — hoy</p>
+                    <h3>Arquería</h3>
+                    <p>En junio de 2026 empecé clases de arquería.</p>
+                    <p class="aprendi">Lo que aprendí: paciencia, respiración, enfoque y a centrarme en un objetivo, que a veces puede estar lejos
+                        pero también puede estar cerca, y que a veces es mejor dar un paso atrás para poder avanzar y lograr el objetivo.
+                    </p>
+
+                    <!-- FOTOS: img/arqueria/1.jpg, 2.jpg… -->
+                    <div class="galeria" data-carpeta="img/arqueria" data-pies="">
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · el arco</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid">
+                            <div class="foto-vacia">foto · la diana</div>
+                            <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 9 · estilo TERMINAL ============ -->
+        <section class="capitulo terminal" id="cap-9" style="--acento: #3fb950;">
+            <div class="cap-cabecera">
+                <span class="cap-num">// capítulo_09</span>
+                <h2>Construir</h2>
+                <p class="cap-fecha">hoy · proyectos</p>
+            </div>
+
+            <div class="ventana">
+                <div class="ventana-barra"><i></i><i></i><i></i><span>hugo@bitacora: ~/proyectos</span></div>
+                <div class="ventana-cuerpo">
+                    <p class="cmd">ls proyectos/</p>
+
+                    <!-- Cada tarjeta es un enlace a su repositorio. Para agregar uno, copia un <a class="proyecto"> -->
+                    <div class="proyectos">
+                        <a class="proyecto" href="https://github.com/krma12/Filtro_Facial" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">python · opencv · mediapipe</p>
+                            <h3>Filtro_Facial</h3>
+                            <p>Filtro de realidad aumentada en tiempo real: detecta tu cara y le pone accesorios virtuales.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/Task_Flow" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">python · flask · sqlite</p>
+                            <h3>Task_Flow</h3>
+                            <p>Gestor de tareas con CRUD completo, interfaz moderna y diseño orientado a objetos.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/analisis-rnid-mexico" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">jupyter · pandas · datos</p>
+                            <h3>analisis-rnid-mexico</h3>
+                            <p>Limpieza y análisis exploratorio de la incidencia delictiva por estado en México (RNID, ene–abr 2026).</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/Image-Processing-with-NumPy" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">jupyter · numpy</p>
+                            <h3>Image-Processing-with-NumPy</h3>
+                            <p>Notebooks interactivos para aprender arreglos multidimensionales y análisis básico de imágenes.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/portfolio-flask" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">flask · sqlalchemy · api rest</p>
+                            <h3>portfolio-flask</h3>
+                            <p>Portafolio personal con base de datos y una API REST para administrar proyectos.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/kali-win7-pentest-labs" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">ciberseguridad · kali linux</p>
+                            <h3>kali-win7-pentest-labs</h3>
+                            <p>Laboratorio casero y aislado de pentesting (Kali + Windows 7), con troubleshooting de red y un write-up de MS17-010.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/Space_Invaders" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">python · pygame</p>
+                            <h3>Space_Invaders</h3>
+                            <p>Mi versión de Space Invaders: power-ups, tabla de récords y disparos enemigos.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/kali-win7-doublepulsar-lab" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">ciberseguridad · kali linux</p>
+                            <h3>kali-win7-doublepulsar-lab</h3>
+                            <p>Otro laboratorio casero y aislado (Kali + Windows 7) para practicar rumbo a certificaciones.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/Pandas_Introduction" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">jupyter · pandas · fork</p>
+                            <h3>Pandas_Introduction</h3>
+                            <p>Ejercicios de clase para aprender Pandas.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <a class="proyecto" href="https://github.com/krma12/numpy" target="_blank" rel="noopener">
+                            <p class="proyecto-tag">jupyter · numpy · fork</p>
+                            <h3>numpy</h3>
+                            <p>Ejercicios de clase de NumPy.</p>
+                            <span class="proyecto-ver">ver repositorio →</span>
+                        </a>
+                        <div class="proyecto">
+                            <p class="proyecto-tag">html · css · javascript</p>
+                            <h3>Esta bitácora</h3>
+                            <p>La página que estás leyendo, hecha a mano para Fundamentos de Desarrollo Web.</p>
+                        </div>
+                    </div>
+
+                    <p class="cmd">open github.com/krma12</p>
+                    <p class="salida"><a class="enlace-term" href="https://github.com/krma12" target="_blank" rel="noopener">→ ver todos mis repositorios</a></p>
+
+                    <p class="cmd">cat stack.txt</p>
+                    <p class="salida">Python · Flask · SQLAlchemy · SQLite · NumPy · Pandas · OpenCV · Mediapipe · Pygame · Jupyter · HTML/CSS · JavaScript · Git · Kali Linux</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ============ CAPÍTULO 10 · TERMINAL ============ -->
+        <section class="capitulo terminal" id="cap-10" style="--acento: #58a6ff;">
+            <div class="cap-cabecera">
+                <span class="cap-num">// capítulo_10</span>
+                <h2>Lo que viene</h2>
+                <p class="cap-fecha">mañana · en construcción</p>
+            </div>
+
+            <div class="ventana">
+                <div class="ventana-barra"><i></i><i></i><i></i><span>hugo@bitacora: ~/futuro</span></div>
+                <div class="ventana-cuerpo">
+                    <p class="cmd">cat roadmap.log</p>
+                    <!-- Leyenda: [✓] hecho · […] en curso · [ ] por hacer. Para agregar una meta, copia un <li> -->
+                    <ul class="roadmap">
+                        <li><span class="ok">[✓]</span> Terminar el 3er cuatrimestre</li>
+                        <li><span class="run">[…]</span> Ingeniería en IA</li>
+                        <li><span class="next">[ ]</span> Certificaciones de ciberseguridad</li>
+                        <li><span class="next">[ ]</span> Certificaciones de idiomas
+                            <ol class="sub-roadmap">
+                                <li>Português</li>
+                                <li>Français</li>
+                                <li><bdi lang="ar">العربية</bdi> <small>(árabe)</small></li>
+                                <li>Deutsch</li>
+                            </ol>
+                        </li>
+                        <li><span class="next">[ ]</span> Agentes de IA para empresas</li>
+                        <li class="abierto"><span class="next">[ ]</span> …</li>
+                    </ul>
+                    <p class="cmd escribiendo" data-texto="echo &quot;La bitácora sigue abierta.&quot;"></p>
+                    <p class="salida">La bitácora sigue abierta.<span class="cursor">▋</span></p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============ EPÍLOGO · CARTA A MI YO DE 2018 ============ -->
+        <!-- La historia termina volviendo al papel: una carta escrita a mano -->
+        <section class="capitulo terminal carta" id="carta" style="--acento: #c8553d;">
+            <div class="carta-hoja">
+                <p class="carta-etiqueta">Epílogo · Carta a mi yo de 2018</p>
+                <p class="carta-saludo">Querido Hugo de 2018:</p>
+                <p class="carta-texto">
+                    Lo bueno, como lo malo, pasará. Así que disfruta el camino y disfruta de las experiencias
+                    que te da la vida, porque solo así se aprende y solo así maduramos.
+                </p>
+                <p class="carta-firma">— Hugo, 2026</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ============ PIE ============ -->
+    <footer class="pie">
+        <p>Hecho a mano con HTML y CSS · Hugo Maldonado · 2026</p>
+        <p class="pie-links">
+            <a href="https://www.linkedin.com/in/hugo-maldonado-a20445201/" target="_blank" rel="noopener">LinkedIn</a> ·
+            <a href="https://github.com/krma12" target="_blank" rel="noopener">GitHub</a> ·
+            <a href="https://www.instagram.com/hugo_mcab_/" target="_blank" rel="noopener">Instagram · @hugo_mcab_</a> ·
+            <a href="https://www.instagram.com/vxlmexico/" target="_blank" rel="noopener">Impresiones 3D · @vxlmexico</a>
+        </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="mapa-datos.js"></script>
+    <script src="mapa.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

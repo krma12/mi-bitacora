@@ -1,0 +1,456 @@
+/* =========================================================
+   BITÁCORA · Hugo Maldonado
+   Idea: la página empieza como un diario de papel y,
+   conforme avanza la historia, se convierte en una terminal.
+   ========================================================= */
+
+/* ---------- 1. Variables (colores y fuentes) ---------- */
+:root {
+    --papel: #f4ecdf;
+    --papel-oscuro: #e9dcc6;
+    --tinta: #2a2420;
+    --tinta-suave: #6b5f55;
+
+    --term-fondo: #0d1117;
+    --term-panel: #161b22;
+    --term-texto: #c9d1d9;
+    --term-gris: #8b949e;
+
+    --serif: "Fraunces", Georgia, serif;
+    --mano: "Caveat", cursive;
+    --mono: "JetBrains Mono", Consolas, monospace;
+
+    --ancho: 760px; /* ancho máximo del contenido */
+}
+
+/* ---------- 2. Reset básico ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--serif);
+    background: var(--papel);
+    color: var(--tinta);
+    line-height: 1.65;
+    font-size: 1.05rem;
+    overflow-x: hidden;
+}
+
+a { color: inherit; }
+
+/* ---------- 3. Barra de progreso ---------- */
+.progreso {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: 3px; z-index: 20;
+}
+.progreso span {
+    display: block; height: 100%; width: 0;
+    background: linear-gradient(90deg, #5b7f5a, #1f8a8a, #c8553d, #d98a1f, #7c5cd6, #3fb950);
+}
+
+/* ---------- 4. Portada ---------- */
+.portada {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 2rem 1rem;
+    max-width: var(--ancho); margin: 0 auto;
+}
+.portada-etiqueta {
+    font-family: var(--mono); font-size: .8rem;
+    letter-spacing: .15em; text-transform: uppercase;
+    color: var(--tinta-suave);
+}
+.portada h1 {
+    font-size: clamp(3.5rem, 14vw, 8rem);
+    line-height: .92; font-weight: 800;
+    margin: 1rem 0 1.5rem;
+    letter-spacing: -.03em;
+}
+.portada h1 em { font-weight: 300; font-style: italic; color: #c8553d; }
+.portada-sub { font-size: 1.25rem; color: var(--tinta-suave); max-width: 30ch; }
+.portada-flecha {
+    margin-top: 2.5rem; align-self: flex-start;
+    font-family: var(--mano); font-size: 1.6rem; text-decoration: none;
+    border-bottom: 2px solid currentColor;
+    animation: flotar 2s ease-in-out infinite;
+}
+@keyframes flotar { 50% { transform: translateY(6px); } }
+
+/* ---------- 5. Índice (menú fijo arriba) ---------- */
+.indice {
+    position: sticky; top: 3px; z-index: 10;
+    display: flex; gap: .4rem;
+    overflow-x: auto;          /* en celular se desliza de lado */
+    scrollbar-width: none;
+    padding: .6rem 1rem;
+    background: rgba(244, 236, 223, .88);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--papel-oscuro);
+    transition: background .4s, border-color .4s;
+}
+.indice::-webkit-scrollbar { display: none; }
+.indice a {
+    flex-shrink: 0;
+    font-family: var(--mono); font-size: .75rem;
+    text-decoration: none; white-space: nowrap;
+    padding: .35rem .7rem; border-radius: 99px;
+    color: var(--tinta-suave);
+    transition: background .3s, color .3s;
+}
+.indice a span { opacity: .5; margin-right: .25rem; }
+.indice a:hover { background: var(--papel-oscuro); }
+.indice a.activo { background: var(--tinta); color: var(--papel); }
+
+/* Cuando estás en la parte "terminal", el menú también se oscurece (lo activa script.js) */
+body.modo-terminal .indice { background: rgba(13, 17, 23, .88); border-color: #30363d; }
+body.modo-terminal .indice a { color: var(--term-gris); }
+body.modo-terminal .indice a:hover { background: #21262d; }
+body.modo-terminal .indice a.activo { background: #3fb950; color: var(--term-fondo); }
+
+/* ---------- 6. Capítulos (estructura común) ---------- */
+.capitulo { padding: 6rem 1rem; }
+.capitulo > * { max-width: var(--ancho); margin-left: auto; margin-right: auto; }
+
+.cap-cabecera { margin-bottom: 3rem; }
+.cap-num {
+    font-family: var(--mono); font-size: .8rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--acento);
+}
+.cap-cabecera h2 {
+    font-size: clamp(2.4rem, 8vw, 4.2rem);
+    line-height: 1; font-weight: 700; letter-spacing: -.02em;
+    margin: .4rem 0 .6rem;
+}
+.cap-fecha { font-style: italic; color: var(--tinta-suave); }
+
+/* Línea de tiempo: la raya vertical con puntos */
+.entradas { border-left: 2px solid var(--acento); padding-left: 1.6rem; }
+.entrada { position: relative; margin-bottom: 3.5rem; }
+.entrada:last-child { margin-bottom: 0; }
+.entrada::before {
+    content: ""; position: absolute;
+    left: calc(-1.6rem - 7px); top: .45rem;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--acento);
+    box-shadow: 0 0 0 4px var(--papel);
+}
+.entrada-fecha {
+    font-family: var(--mono); font-size: .8rem;
+    color: var(--acento); letter-spacing: .05em;
+}
+.entrada h3 { font-size: 1.6rem; line-height: 1.2; margin: .2rem 0 .7rem; }
+.entrada p + p { margin-top: .8rem; }
+
+/* ---------- 7. Estilo PAPEL (capítulos 1–5) ---------- */
+.papel {
+    /* textura de papel: rayas muy suaves de cuaderno */
+    background:
+        repeating-linear-gradient(transparent 0 31px, rgba(42, 36, 32, .045) 31px 32px),
+        var(--papel);
+}
+.papel:nth-of-type(even) { background-color: #f1e7d6; }
+
+.aprendi {
+    font-family: var(--mano); font-size: 1.55rem; line-height: 1.3;
+    color: var(--acento);
+    margin-top: 1.2rem !important;
+    transform: rotate(-1deg);
+}
+
+.cita {
+    font-size: 1.5rem; font-style: italic; font-weight: 300;
+    border-left: 4px solid var(--acento);
+    padding: .3rem 0 .3rem 1rem; margin: 1.4rem 0;
+}
+
+.datos { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .8rem; margin-top: 1.2rem; }
+.datos li {
+    background: #fff8ee; padding: .9rem; border-radius: 6px;
+    border-top: 3px solid var(--acento); font-size: .95rem;
+}
+.datos strong { display: block; font-size: 1.6rem; color: var(--acento); }
+
+/* Idiomas: fichas. "domino" = relleno, "aprendo" = solo contorno */
+.idiomas { list-style: none; display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.2rem; }
+.idiomas li {
+    display: flex; flex-direction: column; min-width: 7.5rem;
+    padding: .6rem .9rem; border-radius: 8px;
+    border: 2px solid var(--acento);
+}
+.idiomas b { font-size: 1.15rem; }
+.idiomas small { font-family: var(--mono); font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; opacity: .75; }
+.idiomas .domino { background: var(--acento); color: #fff; }
+.idiomas .aprendo { border-style: dashed; color: var(--acento); }
+
+/* Fotos tipo polaroid */
+.galeria {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 1.4rem; margin-top: 1.8rem;
+}
+.polaroid {
+    background: #fff; padding: .6rem .6rem 0;
+    box-shadow: 0 6px 18px rgba(42, 36, 32, .15);
+    transform: rotate(-2deg);
+    transition: transform .3s;
+}
+.polaroid:nth-child(2n) { transform: rotate(1.8deg); }
+.polaroid:nth-child(3n) { transform: rotate(-.8deg); }
+.polaroid:hover { transform: rotate(0) scale(1.04); z-index: 2; }
+.polaroid img, .foto-vacia {
+    display: block; width: 100%; aspect-ratio: 1; object-fit: cover;
+}
+.foto-vacia {
+    display: grid; place-items: center; text-align: center;
+    background: repeating-linear-gradient(45deg, #eee5d6 0 10px, #e6dbc8 10px 20px);
+    font-family: var(--mono); font-size: .75rem; color: var(--tinta-suave);
+}
+.polaroid figcaption {
+    font-family: var(--mano); font-size: 1.25rem; text-align: center;
+    padding: .4rem 0 .6rem;
+}
+
+/* ---------- 8. TRANSICIÓN (capítulo 6): el papel se oscurece ---------- */
+.transicion {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--papel) 38%, #3a3550 68%, var(--term-fondo) 100%);
+}
+.transicion .entrada:nth-child(1) { color: var(--tinta); }
+.transicion .entrada:nth-child(2) { color: #e8e2ef; }
+.transicion .entrada:nth-child(3) { color: var(--term-texto); font-family: var(--mono); font-size: .95rem; }
+.transicion .entrada:nth-child(3) h3 { font-family: var(--mono); }
+.transicion .entrada::before { box-shadow: 0 0 0 4px rgba(124, 92, 214, .25); }
+.transicion .aprendi { color: #b9a6ff; }
+
+/* Efecto glitch en el título */
+.glitch { position: relative; }
+.glitch::before, .glitch::after {
+    content: attr(data-texto);
+    position: absolute; inset: 0;
+    pointer-events: none;
+}
+.glitch::before { color: #7c5cd6; animation: glitch 3s infinite steps(1); clip-path: inset(0 0 60% 0); }
+.glitch::after  { color: #3fb950; animation: glitch 3s infinite steps(1) reverse; clip-path: inset(55% 0 0 0); }
+@keyframes glitch {
+    0%, 88%, 100% { transform: none; opacity: 0; }
+    90% { transform: translate(-3px, 1px); opacity: .8; }
+    94% { transform: translate(3px, -1px); opacity: .8; }
+}
+
+/* ---------- 9. Estilo TERMINAL (capítulos 7–8) ---------- */
+.terminal {
+    background: var(--term-fondo); color: var(--term-texto);
+    font-family: var(--mono); font-size: .95rem;
+}
+.terminal .cap-cabecera h2 { font-family: var(--mono); font-weight: 600; letter-spacing: -.04em; }
+.terminal .cap-fecha { color: var(--term-gris); font-style: normal; }
+.terminal .cap-fecha::before { content: "# "; }
+
+.ventana {
+    background: var(--term-panel);
+    border: 1px solid #30363d; border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .45);
+}
+.ventana-barra {
+    display: flex; align-items: center; gap: .45rem;
+    padding: .65rem .9rem; background: #21262d;
+    font-size: .75rem; color: var(--term-gris);
+}
+.ventana-barra i { width: 11px; height: 11px; border-radius: 50%; background: #ff5f57; }
+.ventana-barra i:nth-child(2) { background: #febc2e; }
+.ventana-barra i:nth-child(3) { background: #28c840; }
+.ventana-barra span { margin-left: .6rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ventana-cuerpo { padding: 1.4rem; }
+
+.cmd { color: var(--acento); margin: 1.4rem 0 .8rem; }
+.cmd:first-child { margin-top: 0; }
+.cmd::before { content: "$ "; color: var(--term-gris); }
+.salida { color: var(--term-texto); }
+
+.proyectos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
+.proyecto {
+    border: 1px solid #30363d; border-radius: 8px; padding: 1rem;
+    transition: border-color .3s, transform .3s;
+}
+.proyecto:hover { border-color: var(--acento); transform: translateY(-3px); }
+.proyecto-tag { font-size: .7rem; color: var(--acento); text-transform: uppercase; letter-spacing: .08em; }
+.proyecto h3 { font-size: 1.05rem; color: #f0f6fc; margin: .3rem 0; }
+.proyecto p:last-child { color: var(--term-gris); font-size: .85rem; }
+
+.roadmap { list-style: none; display: grid; gap: .45rem; }
+.ok { color: #3fb950; }
+.run { color: #d29922; }
+.next { color: var(--term-gris); }
+
+.cursor { animation: parpadeo 1s steps(1) infinite; color: var(--acento); }
+@keyframes parpadeo { 50% { opacity: 0; } }
+
+/* ---------- 10. Pie de página ---------- */
+.pie {
+    background: var(--term-fondo); color: var(--term-gris);
+    font-family: var(--mono); font-size: .8rem; text-align: center;
+    padding: 3rem 1rem; border-top: 1px solid #30363d;
+}
+.pie p + p { margin-top: .5rem; }
+.pie a { color: #58a6ff; }
+
+/* ---------- 11. Animación de aparición (la activa script.js) ---------- */
+.revelar { opacity: 0; transform: translateY(30px); transition: opacity .8s ease, transform .8s ease; }
+.revelar.visible { opacity: 1; transform: none; }
+
+/* Respeta a quien prefiere menos movimiento */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .revelar { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+}
+
+/* ---------- 12. Pantallas grandes ---------- */
+@media (min-width: 900px) {
+    .indice { justify-content: center; }
+    .capitulo { padding: 8rem 2rem; }
+    .entradas { padding-left: 2.4rem; }
+    .entrada::before { left: calc(-2.4rem - 7px); }
+}
+
+/* Polaroid sin pie de foto: deja el borde inferior clásico */
+.polaroid:not(:has(figcaption)) { padding-bottom: 2rem; }
+
+/* Capítulo con línea de tiempo dentro de la parte terminal (impresión 3D) */
+.terminal .entrada::before { box-shadow: 0 0 0 4px var(--term-fondo); }
+.terminal .entrada h3 { font-family: var(--mono); color: #f0f6fc; font-size: 1.3rem; }
+.terminal .polaroid { box-shadow: 0 10px 30px rgba(0, 0, 0, .5); }
+.terminal .polaroid figcaption { color: var(--tinta); }
+
+/* =========================================================
+   13. PRÓLOGO: números + mapa
+   ========================================================= */
+.prologo { padding-top: 4rem; }
+
+/* Franja "En números" */
+.numeros {
+    list-style: none;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1px; background: var(--papel-oscuro);
+    border: 1px solid var(--papel-oscuro); border-radius: 12px; overflow: hidden;
+    margin-bottom: 5rem !important;
+}
+.numeros li { background: var(--papel); padding: 1.3rem 1rem; text-align: center; }
+.numeros b {
+    display: block; font-size: clamp(2.4rem, 7vw, 3.4rem); font-weight: 800; line-height: 1;
+    color: var(--acento); font-variant-numeric: tabular-nums;
+}
+.numeros span { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--tinta-suave); }
+
+/* Botones de etapas */
+.mapa-botones { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+.mapa-botones button {
+    --c: var(--tinta);
+    font-family: var(--mono); font-size: .78rem; cursor: pointer;
+    padding: .45rem .9rem; border-radius: 99px;
+    border: 1.5px solid var(--c); background: transparent; color: var(--c);
+    transition: background .25s, color .25s;
+}
+.mapa-botones button:hover, .mapa-botones button.activo { background: var(--c); color: var(--papel); }
+
+/* El mapa con marco de "foto pegada" */
+.mapa-marco {
+    background: #fff; padding: .6rem;
+    box-shadow: 0 10px 30px rgba(42, 36, 32, .18);
+    transform: rotate(-.4deg);
+}
+#mapa { height: min(70vh, 520px); width: 100%; background: #e9e3d6; }
+/* Tono cálido al mapa para que combine con el papel */
+#mapa .leaflet-tile-pane { filter: sepia(.35) saturate(.85) brightness(1.02); }
+.mapa-aviso { display: grid; place-items: center; height: 100%; font-family: var(--mono); font-size: .85rem; color: var(--tinta-suave); padding: 1rem; text-align: center; }
+
+/* Marcadores numerados */
+.pin {
+    display: grid; place-items: center;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--c); color: #fff; border: 2px solid #fff;
+    font: 600 11px/1 var(--mono);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .35);
+}
+.leaflet-popup-content { font-family: var(--serif); font-size: .95rem; }
+
+.mapa-leyenda { font-family: var(--mono); font-size: .75rem; color: var(--tinta-suave); margin-top: 1rem; display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.linea-solida, .linea-vuelo { display: inline-block; width: 28px; border-top: 3px solid var(--tinta-suave); }
+.linea-vuelo { border-top-style: dashed; }
+
+/* Lista de lugares */
+.mapa-lista { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.8rem; margin-top: 2.5rem; }
+.mapa-grupo h3 { font-size: 1.1rem; color: var(--c); border-bottom: 2px solid var(--c); padding-bottom: .3rem; margin-bottom: .6rem; }
+.mapa-grupo ol { list-style: none; }
+.mapa-grupo button {
+    all: unset; cursor: pointer; display: flex; align-items: center; gap: .55rem;
+    padding: .2rem 0; font-size: .95rem;
+}
+.mapa-grupo button:hover { color: var(--c); }
+.mapa-grupo button:focus-visible { outline: 2px solid var(--c); outline-offset: 2px; }
+.mapa-grupo button span {
+    display: grid; place-items: center; flex-shrink: 0;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--c); color: #fff; font: 600 9px/1 var(--mono);
+}
+
+/* Transición más legible: cada entrada lleva su propio fondo,
+   así el contraste no depende de cuánto texto haya */
+.transicion {
+    background: linear-gradient(180deg, var(--papel) 0%, var(--papel) 28%, #3a3550 60%, var(--term-fondo) 92%);
+}
+.transicion .entrada:nth-child(2),
+.transicion .entrada:nth-child(3) {
+    padding: 1.2rem 1.3rem; border-radius: 10px;
+}
+.transicion .entrada:nth-child(2) { background: #3a3550; box-shadow: 0 10px 30px rgba(42, 36, 32, .25); }
+.transicion .entrada:nth-child(3) { background: var(--term-panel); border: 1px solid #30363d; }
+.transicion .entrada:nth-child(2)::before,
+.transicion .entrada:nth-child(3)::before { top: 1.65rem; }
+.transicion .entrada:nth-child(2) .entrada-fecha { color: #b9a6ff; }
+.transicion .polaroid figcaption { color: var(--tinta); font-family: var(--mano); }
+
+/* Tarjetas de proyecto como enlaces */
+a.proyecto { display: flex; flex-direction: column; text-decoration: none; color: inherit; }
+.proyecto-ver { margin-top: auto; padding-top: .8rem; font-size: .75rem; color: var(--acento); opacity: .8; }
+a.proyecto:hover .proyecto-ver { opacity: 1; }
+a.proyecto:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.enlace-term { color: var(--acento); }
+
+/* Sub-lista del roadmap (certificaciones de idiomas) */
+.sub-roadmap { margin: .4rem 0 .2rem 2.6rem; color: var(--term-gris); display: grid; gap: .2rem; }
+.sub-roadmap li::marker { color: var(--acento); }
+.roadmap .abierto { color: var(--term-gris); }
+
+/* =========================================================
+   14. EPÍLOGO: carta a mi yo de 2018 (vuelve el papel)
+   ========================================================= */
+.carta { padding-top: 2rem; }
+.carta-hoja {
+    max-width: 620px !important;
+    background:
+        repeating-linear-gradient(transparent 0 35px, rgba(42, 36, 32, .07) 35px 36px),
+        var(--papel);
+    color: var(--tinta);
+    padding: 2.4rem 2rem 2rem;
+    border-radius: 4px;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, .55);
+    transform: rotate(-1.2deg);
+    position: relative;
+}
+/* cinta adhesiva arriba */
+.carta-hoja::before {
+    content: ""; position: absolute; top: -14px; left: 50%;
+    width: 120px; height: 28px; transform: translateX(-50%) rotate(2deg);
+    background: rgba(233, 220, 198, .75);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, .2);
+}
+.carta-etiqueta {
+    font-family: var(--mono); font-size: .72rem; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--acento); margin-bottom: 1.2rem;
+}
+.carta-saludo, .carta-texto, .carta-firma { font-family: var(--mano); line-height: 1.45; }
+.carta-saludo { font-size: 1.9rem; margin-bottom: .6rem; }
+.carta-texto { font-size: clamp(1.6rem, 4.5vw, 2rem); }
+.carta-firma { font-size: 1.7rem; text-align: right; margin-top: 1.4rem; color: var(--acento); }
