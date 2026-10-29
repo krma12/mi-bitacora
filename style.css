@@ -455,3 +455,20 @@ a.proyecto:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px
 .carta-saludo { font-size: 1.9rem; margin-bottom: .6rem; }
 .carta-texto { font-size: clamp(1.6rem, 4.5vw, 2rem); }
 .carta-firma { font-size: 1.7rem; text-align: right; margin-top: 1.4rem; color: var(--acento); }
+
+
+/* Videos dentro de las galerías y visor de fotos */
+.polaroid video { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; background: #000; }
+.galeria img { cursor: zoom-in; }
+.visor {
+    margin: auto; border: 0; padding: .8rem; max-width: min(92vw, 1000px); background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,.45);
+}
+.visor::backdrop { background: rgba(20, 16, 14, .82); }
+.visor img { display: block; max-width: 100%; max-height: 78vh; margin: 0 auto; }
+.visor p { font-family: var(--mano); font-size: 1.4rem; text-align: center; margin: .5rem 0 0; color: #2a2420; }
+.visor p:empty { display: none; }
+.visor button {
+    position: absolute; top: .4rem; right: .4rem; width: 2.2rem; height: 2.2rem;
+    border: 0; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 1rem; cursor: pointer;
+}

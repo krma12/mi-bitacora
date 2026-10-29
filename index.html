@@ -199,7 +199,7 @@
                     </p>
 
                     <!-- FOTOS: img/playa_del_carmen/1.jpg, 2.jpg… -->
-                    <div class="galeria" data-carpeta="img/playa_del_carmen" data-pies="">
+                    <div class="galeria" data-carpeta="img/playa_del_carmen" data-pies="El mar Caribe|Con amigos|Selfie en pandemia">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · el mar</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -220,7 +220,7 @@
                     </p>
 
                     <!-- FOTOS: img/tulum/1.jpg, 2.jpg… -->
-                    <div class="galeria" data-carpeta="img/tulum" data-pies="">
+                    <div class="galeria" data-carpeta="img/tulum" data-pies="En la playa|Vista al Caribe desde la terraza|En familia">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · Tulum</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -291,7 +291,7 @@
                     </p>
 
                     <!-- FOTOS: img/new_york/1.jpg, 2.jpg, 3.jpg… -->
-                    <div class="galeria" data-carpeta="img/new_york" data-pies="">
+                    <div class="galeria" data-carpeta="img/new_york" data-pies="Mi bienvenida|Times Square|Grand Central|Columbus Circle|Mural en Brooklyn|En el subway|Fiesta de San Genaro, Little Italy|Invierno en Sleepy Hollow|Con Barry Pearl, de Vaselina|Con amigos|Rumbo al trabajo">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · Harlem</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -303,6 +303,10 @@
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · Rochester</div>
                             <figcaption>✎ pie de foto</figcaption>
+                        </figure>
+                        <figure class="polaroid polaroid-video fija">
+                            <video src="img/new_york/godzilla.mp4" poster="img/new_york/godzilla-portada.jpg" controls playsinline preload="none"></video>
+                            <figcaption>🎬 Godzilla</figcaption>
                         </figure>
                     </div>
                 </article>
@@ -364,7 +368,7 @@
                     </p>
 
                     <!-- FOTOS: img/restaurante/1.jpg, 2.jpg… -->
-                    <div class="galeria" data-carpeta="img/restaurante" data-pies="">
+                    <div class="galeria" data-carpeta="img/restaurante" data-pies="El restaurante|Camarones de la casa|Para acompañar">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · el local</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -544,7 +548,7 @@
                     </p>
 
                     <!-- FOTOS: img/impresion_3d/1.jpg, 2.jpg… -->
-                    <div class="galeria" data-carpeta="img/impresion_3d" data-pies="">
+                    <div class="galeria" data-carpeta="img/impresion_3d" data-pies="Mi taller|Busto de Zeus|Copas del Mundial en serie|El David|Recién salidas de la impresora">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · lamparita espiral</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -617,7 +621,7 @@
                     </p>
 
                     <!-- FOTOS: img/arqueria/1.jpg, 2.jpg… -->
-                    <div class="galeria" data-carpeta="img/arqueria" data-pies="">
+                    <div class="galeria" data-carpeta="img/arqueria" data-pies="Mi equipo de arquería">
                         <figure class="polaroid">
                             <div class="foto-vacia">foto · el arco</div>
                             <figcaption>✎ pie de foto</figcaption>
@@ -786,6 +790,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script src="mapa-datos.js"></script>
     <script src="mapa.js"></script>
+    <dialog class="visor" id="visor" aria-label="Foto ampliada">
+        <img alt="">
+        <p></p>
+        <button type="button" aria-label="Cerrar">✕</button>
+    </dialog>
     <script src="script.js"></script>
 </body>
 

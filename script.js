@@ -102,7 +102,9 @@ document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
     }
     if (fotos.length === 0) return; // carpeta vacía: se quedan los recuadros grises
 
-    galeria.innerHTML = "";
+    // Quita solo los recuadros grises; conserva lo fijo (por ejemplo, un video)
+    galeria.querySelectorAll(".polaroid:not(.fija)").forEach((f) => f.remove());
+    const primeraFija = galeria.querySelector(".fija");
     fotos.forEach((src, i) => {
         const figura = document.createElement("figure");
         figura.className = "polaroid";
@@ -116,6 +118,23 @@ document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
             pie.textContent = pies[i];
             figura.appendChild(pie);
         }
-        galeria.appendChild(figura);
+        galeria.insertBefore(figura, primeraFija);
     });
 });
+
+// 6) Visor: al hacer clic en una foto se ve completa (sin recorte)
+const visor = document.getElementById("visor");
+if (visor) {
+    document.addEventListener("click", (e) => {
+        const img = e.target.closest(".galeria img");
+        if (!img) return;
+        visor.querySelector("img").src = img.src;
+        visor.querySelector("img").alt = img.alt;
+        visor.querySelector("p").textContent = img.alt.startsWith("Foto ") ? "" : img.alt;
+        visor.showModal();
+    });
+    // se cierra con la X, con Esc o tocando fuera de la foto
+    visor.addEventListener("click", (e) => {
+        if (e.target === visor || e.target.closest("button")) visor.close();
+    });
+}
