@@ -472,3 +472,45 @@ a.proyecto:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px
     position: absolute; top: .4rem; right: .4rem; width: 2.2rem; height: 2.2rem;
     border: 0; border-radius: 50%; background: rgba(0,0,0,.6); color: #fff; font-size: 1rem; cursor: pointer;
 }
+
+/* Álbum de Memorias: "cuarto oscuro" cálido.
+   Sale del azul noche de la terminal, se entibia hacia un ciruela-café (como la luz
+   ámbar de un cuarto de revelado) y vuelve a oscurecer para entrar suave a la carta. */
+.memorias {
+    --memo-texto: #efe6d8;
+    --memo-suave: #b9ab9b;
+    --memo-fondo: #2a2230;
+    background:
+        radial-gradient(ellipse 80% 45% at 50% 18%, rgba(224, 169, 109, .13), transparent 70%),
+        linear-gradient(180deg, var(--term-fondo) 0%, #1c1a25 18%, var(--memo-fondo) 50%, #211b25 82%, var(--term-fondo) 100%);
+    color: var(--memo-texto);
+}
+.memorias .cap-cabecera h2 { color: var(--memo-texto); }
+.memorias .cap-fecha { color: var(--memo-suave); }
+.memorias .entradas { border-left-color: rgba(224, 169, 109, .45); }
+.memorias .entrada::before { box-shadow: 0 0 0 4px var(--memo-fondo), 0 0 14px rgba(224, 169, 109, .55); }
+.memorias .memoria-grupo h3 { margin-bottom: .2rem; color: var(--memo-texto); }
+.memorias .galeria { margin-top: 1rem; }
+.memorias .polaroid {
+    background: #fbf6ee;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, .45), 0 0 50px rgba(224, 169, 109, .07);
+}
+.memorias .polaroid figcaption { color: var(--tinta); }
+.memorias-vacio { font-family: var(--mano); font-size: 1.5rem; color: var(--memo-suave); }
+[hidden] { display: none !important; }
+body.modo-terminal .indice a.activo[href="#memorias"] { background: #e0a96d; color: #1c1a25; }
+
+/* Botón flotante de idioma ES / EN */
+.idioma {
+    position: fixed; right: 16px; bottom: 16px; z-index: 50;
+    display: flex; gap: 2px; padding: 4px; border: 1px solid var(--papel-oscuro);
+    border-radius: 999px; background: rgba(244, 236, 223, .92); backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(42, 36, 32, .18);
+    font-family: var(--mono); font-size: .8rem; cursor: pointer;
+}
+.idioma span { padding: .45rem .7rem; border-radius: 999px; color: var(--tinta-suave); min-width: 2.6rem; text-align: center; }
+.idioma .idioma-activo { background: var(--tinta); color: var(--papel); }
+.idioma:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+body.modo-terminal .idioma { background: rgba(13, 17, 23, .88); border-color: #30363d; }
+body.modo-terminal .idioma span { color: var(--term-gris); }
+body.modo-terminal .idioma .idioma-activo { background: #3fb950; color: var(--term-fondo); }

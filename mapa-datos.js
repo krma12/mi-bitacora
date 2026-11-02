@@ -1,7 +1,8 @@
 // =========================================================
 // DATOS DEL MAPA · aquí agregas o quitas lugares
 // ---------------------------------------------------------
-// Cada lugar: { nombre, etapa, lat, lng, nota, zona? }
+// Cada lugar: { nombre, etapa, lat, lng, nota, zona?, nota_en?, nombre_en? }
+//  - nota_en / nombre_en: la versión en inglés (si falta, se usa la de español)
 //  - etapa: "cdmx" | "caribe" | "nuevayork"  (define el color)
 //  - lat/lng: búscalo en Google Maps → clic derecho sobre el lugar → copia los números
 //  - zona (opcional): "nyc" lo incluye en el botón "Manhattan y Bronx"
@@ -10,40 +11,40 @@
 // =========================================================
 
 const ETAPAS = {
-    cdmx:      { nombre: "Ciudad de México", color: "#5b7f5a" },
-    caribe:    { nombre: "Riviera Maya y Yucatán", color: "#1f8a8a" },
-    nuevayork: { nombre: "Nueva York y Nueva Jersey", color: "#a63d6b" },
+    cdmx:      { nombre: "Ciudad de México", nombre_en: "Mexico City", color: "#5b7f5a" },
+    caribe:    { nombre: "Riviera Maya y Yucatán", nombre_en: "Riviera Maya & Yucatán", color: "#1f8a8a" },
+    nuevayork: { nombre: "Nueva York y Nueva Jersey", nombre_en: "New York & New Jersey", color: "#a63d6b" },
 };
 
 const LUGARES = [
     // ---- Inicio: Ciudad de México (2018 – 2020) ----
-    { nombre: "Ciudad de México", etapa: "cdmx", lat: 19.4326, lng: -99.1332, nota: "Veterinaria en la UVM · 2018 – 2020" },
+    { nombre: "Ciudad de México", etapa: "cdmx", lat: 19.4326, lng: -99.1332, nota: "Veterinaria en la UVM · 2018 – 2020", nombre_en: "Mexico City", nota_en: "Veterinary school at UVM · 2018 – 2020" },
 
     // ---- Caribe (2020 – 2021) ----
-    { nombre: "Playa del Carmen", etapa: "caribe", lat: 20.6296, lng: -87.0739, nota: "Aquí viví · 2020 – 2021<br>Donde mi vida cambió" },
-    { nombre: "Cancún",           etapa: "caribe", lat: 21.1619, lng: -86.8515, nota: "Lo visité" },
-    { nombre: "Puerto Aventuras", etapa: "caribe", lat: 20.4993, lng: -87.2271, nota: "Lo visité" },
-    { nombre: "Puerto Morelos",   etapa: "caribe", lat: 20.8478, lng: -86.8755, nota: "Lo visité" },
-    { nombre: "Tulum",            etapa: "caribe", lat: 20.2114, lng: -87.4654, nota: "Lo visité<br>Fotos frente a la playa con mi familia y una amiga de NY" },
-    { nombre: "Mérida",           etapa: "caribe", lat: 20.9674, lng: -89.5926, nota: "Lo visité" },
+    { nombre: "Playa del Carmen", etapa: "caribe", lat: 20.6296, lng: -87.0739, nota: "Aquí viví · 2020 – 2021<br>Donde mi vida cambió", nota_en: "I lived here · 2020 – 2021<br>Where my life changed" },
+    { nombre: "Cancún",           etapa: "caribe", lat: 21.1619, lng: -86.8515, nota: "Lo visité", nota_en: "I visited" },
+    { nombre: "Puerto Aventuras", etapa: "caribe", lat: 20.4993, lng: -87.2271, nota: "Lo visité", nota_en: "I visited" },
+    { nombre: "Puerto Morelos",   etapa: "caribe", lat: 20.8478, lng: -86.8755, nota: "Lo visité", nota_en: "I visited" },
+    { nombre: "Tulum",            etapa: "caribe", lat: 20.2114, lng: -87.4654, nota: "Lo visité<br>Fotos frente a la playa con mi familia y una amiga de NY", nota_en: "I visited<br>Beach photos with my family and a friend from NY" },
+    { nombre: "Mérida",           etapa: "caribe", lat: 20.9674, lng: -89.5926, nota: "Lo visité", nota_en: "I visited" },
 
     // ---- Nueva York (2021 – 2024) ----
-    { nombre: "Rochester, NY",       etapa: "nuevayork", lat: 43.1566, lng: -77.6088, nota: "Aquí viví · primera parada, 2021<br>Trabajo en construcción y mi primer invierno" },
-    { nombre: "Harrison, NY",        etapa: "nuevayork", lat: 40.9690, lng: -73.7126, nota: "Aquí viví" },
+    { nombre: "Rochester, NY",       etapa: "nuevayork", lat: 43.1566, lng: -77.6088, nota: "Aquí viví · primera parada, 2021<br>Trabajo en construcción y mi primer invierno", nota_en: "I lived here · first stop, 2021<br>Construction work and my first winter" },
+    { nombre: "Harrison, NY",        etapa: "nuevayork", lat: 40.9690, lng: -73.7126, nota: "Aquí viví", nota_en: "I lived here" },
     { nombre: "New Rochelle, NY",    etapa: "nuevayork", lat: 40.9115, lng: -73.7824, nota: "" },
-    { nombre: "Brewster, NY",        etapa: "nuevayork", lat: 41.3973, lng: -73.6171, nota: "Aquí tengo amigos" },
-    { nombre: "Wingdale, NY",        etapa: "nuevayork", lat: 41.6462, lng: -73.5609, nota: "Aquí tengo amigos" },
-    { nombre: "White Plains, NY",    etapa: "nuevayork", lat: 41.0340, lng: -73.7629, nota: "Lo visité" },
-    { nombre: "Elmhurst · Eastchester, NY", etapa: "nuevayork", lat: 40.9584, lng: -73.8132, nota: "Lo visité" },
-    { nombre: "City College of New York",   etapa: "nuevayork", lat: 40.8200, lng: -73.9493, nota: "Iba a buscar a una amiga que estudiaba aquí", zona: "nyc" },
-    { nombre: "The Bronx",           etapa: "nuevayork", lat: 40.8448, lng: -73.8648, nota: "Explorando la ciudad con amigos", zona: "nyc" },
-    { nombre: "Harlem",              etapa: "nuevayork", lat: 40.8116, lng: -73.9465, nota: "Su cultura, su gente, su historia", zona: "nyc" },
-    { nombre: "125th Street · Apollo Theater", etapa: "nuevayork", lat: 40.8100, lng: -73.9500, nota: "Mi lugar favorito de Nueva York", zona: "nyc" },
-    { nombre: "Manhattan",           etapa: "nuevayork", lat: 40.7580, lng: -73.9855, nota: "Lo visité", zona: "nyc" },
+    { nombre: "Brewster, NY",        etapa: "nuevayork", lat: 41.3973, lng: -73.6171, nota: "Aquí tengo amigos", nota_en: "I have friends here" },
+    { nombre: "Wingdale, NY",        etapa: "nuevayork", lat: 41.6462, lng: -73.5609, nota: "Aquí tengo amigos", nota_en: "I have friends here" },
+    { nombre: "White Plains, NY",    etapa: "nuevayork", lat: 41.0340, lng: -73.7629, nota: "Lo visité", nota_en: "I visited" },
+    { nombre: "Elmhurst · Eastchester, NY", etapa: "nuevayork", lat: 40.9584, lng: -73.8132, nota: "Lo visité", nota_en: "I visited" },
+    { nombre: "City College of New York",   etapa: "nuevayork", lat: 40.8200, lng: -73.9493, nota: "Iba a buscar a una amiga que estudiaba aquí", nota_en: "I used to pick up a friend who studied here", zona: "nyc" },
+    { nombre: "The Bronx",           etapa: "nuevayork", lat: 40.8448, lng: -73.8648, nota: "Explorando la ciudad con amigos", nota_en: "Exploring the city with friends", zona: "nyc" },
+    { nombre: "Harlem",              etapa: "nuevayork", lat: 40.8116, lng: -73.9465, nota: "Su cultura, su gente, su historia", nota_en: "Its culture, its people, its history", zona: "nyc" },
+    { nombre: "125th Street · Apollo Theater", etapa: "nuevayork", lat: 40.8100, lng: -73.9500, nota: "Mi lugar favorito de Nueva York", nota_en: "My favorite place in New York", zona: "nyc" },
+    { nombre: "Manhattan",           etapa: "nuevayork", lat: 40.7580, lng: -73.9855, nota: "Lo visité", nota_en: "I visited", zona: "nyc" },
     { nombre: "Little Italy",        etapa: "nuevayork", lat: 40.7191, lng: -73.9973, nota: "Lower Manhattan", zona: "nyc" },
     // ✎ aquí puedes agregar más zonas de Manhattan (con zona: "nyc")
-    { nombre: "Edison, NJ",          etapa: "nuevayork", lat: 40.5187, lng: -74.4121, nota: "Lo visité" },
+    { nombre: "Edison, NJ",          etapa: "nuevayork", lat: 40.5187, lng: -74.4121, nota: "Lo visité", nota_en: "I visited" },
 
     // ---- Regreso: Ciudad de México (2024 – hoy) ----
-    { nombre: "Ciudad de México",    etapa: "cdmx", lat: 19.4326, lng: -99.1332, nota: "De regreso · 2024 – hoy<br><i>Uno siempre regresa a donde fue feliz</i><br>Restaurante La Nueva Atlántida · 2024 – 2025<br>Hybridge · 2025 – hoy" },
+    { nombre: "Ciudad de México",    etapa: "cdmx", lat: 19.4326, lng: -99.1332, nota: "De regreso · 2024 – hoy<br><i>Uno siempre regresa a donde fue feliz</i><br>Restaurante La Nueva Atlántida · 2024 – 2025<br>Hybridge · 2025 – hoy", nombre_en: "Mexico City", nota_en: "Back home · 2024 – today<br><i>You always go back to where you were happy</i><br>La Nueva Atlántida Restaurant · 2024 – 2025<br>Hybridge · 2025 – today" },
 ];

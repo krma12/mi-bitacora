@@ -9,7 +9,7 @@ const lugaresUnicos = [...new Set(LUGARES.map((l) => l.nombre))];
 const CALCULADOS = {
     anios: new Date().getFullYear() - 2018,                     // años desde que empezó la historia
     lugares: lugaresUnicos.length,                              // lugares distintos en el mapa
-    capitulos: document.querySelectorAll(".capitulo:not(.prologo):not(.carta)").length,
+    capitulos: document.querySelectorAll(".capitulo:not(.prologo):not(.carta):not(.memorias)").length,
 };
 
 document.querySelectorAll("[data-contar]").forEach((el) => {
@@ -36,7 +36,7 @@ const contenedor = document.getElementById("mapa");
 
 if (!window.L) {
     // Sin internet no carga Leaflet: mostramos un aviso en lugar del mapa
-    contenedor.innerHTML = '<p class="mapa-aviso">El mapa necesita conexión a internet para cargarse.</p>';
+    contenedor.innerHTML = `<p class="mapa-aviso">${tr("El mapa necesita conexión a internet para cargarse.", "The map needs an internet connection to load.")}</p>`;
 } else {
     iniciarMapa();
 }
@@ -79,9 +79,9 @@ function iniciarMapa() {
             iconSize: [26, 26],
             iconAnchor: [13, 13],
         });
-        const notas = LUGARES.filter((x) => x.nombre === nombre && x.nota).map((x) => x.nota);
+        const notas = LUGARES.filter((x) => x.nombre === nombre && x.nota).map((x) => tr(x.nota, x.nota_en));
         marcadores[nombre] = L.marker([l.lat, l.lng], { icon: icono, opacity: 0 })
-            .bindPopup(`<strong>${nombre}</strong>${notas.map((n) => `<br><small>${n}</small>`).join("")}`)
+            .bindPopup(`<strong>${tr(nombre, l.nombre_en)}</strong>${notas.map((n) => `<br><small>${n}</small>`).join("")}`)
             .addTo(mapa);
     });
 
@@ -173,11 +173,12 @@ function iniciarMapa() {
         const grupo = document.createElement("div");
         grupo.className = "mapa-grupo";
         grupo.style.setProperty("--c", etapa.color);
-        grupo.innerHTML = `<h3>${etapa.nombre}</h3>`;
+        grupo.innerHTML = `<h3>${tr(etapa.nombre, etapa.nombre_en)}</h3>`;
         const ol = document.createElement("ol");
         nombres.forEach((nombre) => {
             const li = document.createElement("li");
-            li.innerHTML = `<button type="button"><span>${lugaresUnicos.indexOf(nombre) + 1}</span>${nombre}</button>`;
+            const lugar = LUGARES.find((l) => l.nombre === nombre);
+            li.innerHTML = `<button type="button"><span>${lugaresUnicos.indexOf(nombre) + 1}</span>${tr(nombre, lugar.nombre_en)}</button>`;
             li.querySelector("button").addEventListener("click", () => {
                 const m = marcadores[nombre];
                 m.setOpacity(1);

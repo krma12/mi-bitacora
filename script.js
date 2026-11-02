@@ -11,20 +11,38 @@ window.addEventListener("scroll", () => {
     barra.style.width = (window.scrollY / total) * 100 + "%";
 });
 
-// 2) Las entradas aparecen suavemente cuando entran a la pantalla
-const elementos = document.querySelectorAll(".entrada, .cap-cabecera, .ventana, .polaroid");
-elementos.forEach((el) => el.classList.add("revelar"));
+// 2) Las entradas aparecen suavemente cuando entran a la pantalla.
+//    Se activan en cuanto asoma cualquier parte (threshold 0): con un umbral más alto,
+//    las entradas muy largas (galerías grandes en el celular) nunca llegaban al porcentaje
+//    y se quedaban invisibles, por eso a veces la página se veía vacía.
+function revelar(el) { el.classList.add("visible"); }
 
-const observadorRevelar = new IntersectionObserver((entradas) => {
-    entradas.forEach((e) => {
-        if (e.isIntersecting) {
-            e.target.classList.add("visible");
-            observadorRevelar.unobserve(e.target); // solo una vez
-        }
+const observadorRevelar = "IntersectionObserver" in window
+    ? new IntersectionObserver((entradas) => {
+        entradas.forEach((e) => {
+            if (e.isIntersecting) {
+                revelar(e.target);
+                observadorRevelar.unobserve(e.target); // solo una vez
+            }
+        });
+    }, { threshold: 0, rootMargin: "0px 0px -8% 0px" })
+    : null;
+
+function prepararRevelado(el) {
+    if (!observadorRevelar) return;          // navegador viejo: todo visible desde el inicio
+    el.classList.add("revelar");
+    observadorRevelar.observe(el);
+}
+
+document.querySelectorAll(".entrada, .cap-cabecera, .ventana").forEach(prepararRevelado);
+
+// Red de seguridad: si por algo una entrada sigue oculta y ya pasó por la pantalla
+// (por ejemplo al saltar con el menú), se muestra igual.
+window.addEventListener("scroll", () => {
+    document.querySelectorAll(".revelar:not(.visible)").forEach((el) => {
+        if (el.getBoundingClientRect().top < window.innerHeight) revelar(el);
     });
-}, { threshold: 0.15 });
-
-elementos.forEach((el) => observadorRevelar.observe(el));
+}, { passive: true });
 
 // 3) Marca en el menú el capítulo que estás leyendo
 //    y oscurece el menú cuando llegas a la parte "terminal"
@@ -46,7 +64,9 @@ const observadorCapitulo = new IntersectionObserver((entradas) => {
             }
         });
 
-        document.body.classList.toggle("modo-terminal", e.target.classList.contains("terminal"));
+        // Memorias también usa el menú oscuro, para no dar un salto de color
+        const oscuro = e.target.classList.contains("terminal") || e.target.classList.contains("memorias");
+        document.body.classList.toggle("modo-terminal", oscuro);
     });
 }, { rootMargin: "-45% 0px -50% 0px" }); // cuenta como "activo" el que está a media pantalla
 
@@ -54,7 +74,7 @@ capitulos.forEach((c) => observadorCapitulo.observe(c));
 
 // 4) Efecto de máquina de escribir en los comandos con la clase "escribiendo"
 document.querySelectorAll(".escribiendo").forEach((el) => {
-    const texto = el.dataset.texto;
+    const texto = (window.LANG === "en" && el.dataset.textoEn) || el.dataset.texto;
     let i = 0;
     const observador = new IntersectionObserver(([e]) => {
         if (!e.isIntersecting) return;
@@ -68,10 +88,10 @@ document.querySelectorAll(".escribiendo").forEach((el) => {
 });
 
 // 5) Galerías automáticas: cada <div class="galeria" data-carpeta="img/xxx">
-//    busca 1.jpg, 2.jpg, 3.jpg… en esa carpeta y crea una polaroid por cada foto.
-//    Se detiene en el primer número que no exista. Acepta .jpg .jpeg .png .webp
-const EXTENSIONES = ["jpg", "jpeg", "png", "webp", "JPG", "JPEG", "PNG"];
-const MAX_FOTOS = 20;
+//    muestra 1.jpg, 2.jpg, 3.jpg… de esa carpeta como polaroids.
+//    - Con data-fotos="N" las crea de inmediato (rápido en el celular).
+//    - Sin data-fotos, las busca todas a la vez y se queda con las que existan.
+const MAX_FOTOS = 30;
 
 function existe(src) {
     return new Promise((ok) => {
@@ -82,26 +102,15 @@ function existe(src) {
     });
 }
 
-async function buscarFoto(carpeta, numero) {
-    for (const ext of EXTENSIONES) {
-        const src = `${carpeta}/${numero}.${ext}`;
-        if (await existe(src)) return src;
-    }
-    return null;
+async function buscarFotos(carpeta) {
+    const candidatas = Array.from({ length: MAX_FOTOS }, (_, i) => `${carpeta}/${i + 1}.jpg`);
+    const hay = await Promise.all(candidatas.map(existe));
+    const corte = hay.indexOf(false);
+    return candidatas.slice(0, corte === -1 ? MAX_FOTOS : corte);
 }
 
-document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
-    const carpeta = galeria.dataset.carpeta;
-    const pies = (galeria.dataset.pies || "").split("|");
-    const fotos = [];
-
-    for (let n = 1; n <= MAX_FOTOS; n++) {
-        const src = await buscarFoto(carpeta, n);
-        if (!src) break;
-        fotos.push(src);
-    }
-    if (fotos.length === 0) return; // carpeta vacía: se quedan los recuadros grises
-
+function armarGaleria(galeria, fotos) {
+    const pies = ((window.LANG === "en" && galeria.dataset.piesEn) || galeria.dataset.pies || "").split("|");
     // Quita solo los recuadros grises; conserva lo fijo (por ejemplo, un video)
     galeria.querySelectorAll(".polaroid:not(.fija)").forEach((f) => f.remove());
     const primeraFija = galeria.querySelector(".fija");
@@ -110,8 +119,10 @@ document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
         figura.className = "polaroid";
         const img = document.createElement("img");
         img.src = src;
-        img.alt = pies[i] || `Foto ${i + 1}`;
+        img.alt = pies[i] || `${window.LANG === "en" ? "Photo" : "Foto"} ${i + 1}`;
+        img.dataset.pie = pies[i] || "";
         img.loading = "lazy";
+        img.decoding = "async";
         figura.appendChild(img);
         if (pies[i]) {
             const pie = document.createElement("figcaption");
@@ -120,7 +131,32 @@ document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
         }
         galeria.insertBefore(figura, primeraFija);
     });
+}
+
+document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
+    const carpeta = galeria.dataset.carpeta;
+    const total = parseInt(galeria.dataset.fotos, 10);
+    const fotos = total > 0
+        ? Array.from({ length: total }, (_, i) => `${carpeta}/${i + 1}.jpg`)
+        : await buscarFotos(carpeta);
+
+    const grupo = galeria.closest(".memoria-grupo");
+    if (fotos.length === 0) {
+        if (grupo) grupo.hidden = true;     // álbum de Memorias sin fotos: se oculta
+        actualizarMemorias();
+        return;                             // en los capítulos se quedan los recuadros grises
+    }
+    armarGaleria(galeria, fotos);
+    actualizarMemorias();
 });
+
+// Si ningún álbum de Memorias tiene fotos, muestra el aviso de "pronto"
+function actualizarMemorias() {
+    const aviso = document.querySelector(".memorias-vacio");
+    if (!aviso) return;
+    const visibles = [...document.querySelectorAll(".memoria-grupo")].some((g) => !g.hidden && g.querySelector("img"));
+    aviso.hidden = visibles;
+}
 
 // 6) Visor: al hacer clic en una foto se ve completa (sin recorte)
 const visor = document.getElementById("visor");
@@ -130,7 +166,7 @@ if (visor) {
         if (!img) return;
         visor.querySelector("img").src = img.src;
         visor.querySelector("img").alt = img.alt;
-        visor.querySelector("p").textContent = img.alt.startsWith("Foto ") ? "" : img.alt;
+        visor.querySelector("p").textContent = img.dataset.pie || "";
         visor.showModal();
     });
     // se cierra con la X, con Esc o tocando fuera de la foto
