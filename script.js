@@ -135,8 +135,9 @@ function armarGaleria(galeria, fotos) {
 
 document.querySelectorAll(".galeria[data-carpeta]").forEach(async (galeria) => {
     const carpeta = galeria.dataset.carpeta;
+    // data-fotos="0" = todavía sin fotos (no las busca); sin data-fotos = las busca solas
     const total = parseInt(galeria.dataset.fotos, 10);
-    const fotos = total > 0
+    const fotos = !Number.isNaN(total)
         ? Array.from({ length: total }, (_, i) => `${carpeta}/${i + 1}.jpg`)
         : await buscarFotos(carpeta);
 
