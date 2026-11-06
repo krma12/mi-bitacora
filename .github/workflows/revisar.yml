@@ -1,0 +1,22 @@
+# Revisa la bitácora en cada push: archivos, galerías, traducción,
+# peso de fotos, privacidad (GPS/EXIF, correos) y seguridad (SRI, CSP).
+name: Revisar bitácora
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  revisar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pillow
+      - run: python herramientas/revisar.py

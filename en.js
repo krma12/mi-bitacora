@@ -249,6 +249,7 @@ window.I18N_EN = {
   "cap-9.43": "The page you're reading, handmade for my Web Development Fundamentals class.",
   "cap-9.44": "→ see my live portfolio",
   "cap-9.45": "→ see all my repositories",
+  "cap-9.46": "Python · Flask · SQLAlchemy · SQLite · NumPy · Pandas · OpenCV · Mediapipe · Pygame · Jupyter · HTML/CSS · JavaScript · REST APIs · pytest · Git · GitHub Actions · Kali Linux",
   "cap-10.1": "// chapter_10",
   "cap-10.2": "What's next",
   "cap-10.3": "tomorrow · under construction",

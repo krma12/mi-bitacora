@@ -33,10 +33,13 @@ Al final la historia vuelve al papel, con una carta a mi yo de 2018.
 | 10 | Lo que viene | mañana | terminal |
 | ✉ | Carta a mi yo de 2018 | — | papel |
 
+Después de la carta está **Memorias**: álbumes de momentos que marcaron el camino, como mi primera sutura en 2018.
+
 ##  Qué tiene
 
 - **Mapa interactivo** ([Leaflet](https://leafletjs.com/)): la ruta CDMX → Caribe → Nueva York → CDMX se dibuja sola, con botones para hacer zoom a cada etapa. Al hacer clic en un lugar, su nota dice si ahí viví, si lo visité o si ahí tengo amigos.
-- **Galerías automáticas**: cada sección lee sus fotos de una carpeta, sin tocar el HTML.
+- **Galerías automáticas**: cada sección lee sus fotos de una carpeta, con un visor para verlas en grande.
+- **Versión en inglés**: un botón ES / EN traduce toda la página, sin depender del traductor del navegador.
 - **Contadores animados**: algunos números se calculan solos, como los años, los lugares del mapa y los capítulos.
 - **Menú que sigue tu lectura**: marca el capítulo actual y se oscurece al llegar a la parte de terminal.
 - **Animaciones al hacer scroll**, barra de progreso, efecto *glitch* y máquina de escribir.
@@ -45,7 +48,39 @@ Al final la historia vuelve al papel, con una carta a mi yo de 2018.
 - **Ícono propio** en la pestaña del navegador (`favicon.svg`).
 - **Accesibilidad básica**: se respeta `prefers-reduced-motion`, los botones tienen foco visible y las fotos llevan texto alternativo.
 
-**Tecnologías:** HTML5 · CSS3 (variables, grid, flexbox, animaciones) · JavaScript (IntersectionObserver, promesas) · Leaflet
+**Tecnologías:** HTML5 · CSS3 (variables, grid, flexbox, animaciones) · JavaScript (IntersectionObserver, promesas) · Leaflet · Python (revisión automática) · GitHub Actions
+
+##  Cómo funciona
+
+![Todo vive en el repositorio; solo el mapa se carga de fuera](docs/arquitectura.svg)
+
+Es un sitio **estático**: no tiene servidor ni base de datos. GitHub Pages publica los archivos tal cual. Lo único que llega de fuera es el mapa (Leaflet y sus teselas) y las tipografías.
+
+##  Seguridad y privacidad
+
+Es una página muy personal, así que cuida lo que publica:
+
+| Qué | Cómo |
+|---|---|
+| **Sin ubicación en las fotos** | Las fotos del celular guardan dónde se tomaron (GPS). Todas se suben sin metadatos, y la revisión automática rechaza cualquiera que los traiga. |
+| **Caras de terceros** | En fotos de pacientes o de personas que no dieron permiso, las caras van difuminadas. |
+| **Sin correo publicado** | El contacto es por LinkedIn o el portfolio; un correo en la página termina en listas de spam. |
+| **Política de seguridad (CSP)** | GitHub Pages no permite configurar encabezados del servidor, así que la CSP va en una etiqueta `<meta>`: solo se ejecutan scripts de este sitio y de cdnjs. |
+| **Huella de los archivos externos (SRI)** | Leaflet lleva `integrity`: si alguien alterara el archivo en el CDN, el navegador no lo carga. |
+| **HTTPS** | GitHub Pages sirve todo por HTTPS. |
+
+##  Revisión automática
+
+En cada push, GitHub Actions corre `herramientas/revisar.py`. Revisa que:
+
+1. existan todos los archivos y fotos que usa la página;
+2. cada galería tenga un pie por foto, en español y en inglés;
+3. cada texto con `data-i18n` tenga su traducción en `en.js`;
+4. las fotos pesen hasta 700 KB y los videos hasta 6 MB;
+5. ninguna foto traiga GPS o metadatos y ningún archivo publique un correo;
+6. los archivos externos lleven SRI y la página tenga CSP.
+
+Si algo falla, el check sale en rojo con la lista de problemas. Para correrla en tu computadora: `pip install pillow` y luego `python herramientas/revisar.py`.
 
 ##  Estructura
 
@@ -56,6 +91,8 @@ mi-bitacora/
 ├── script.js         → animaciones, menú y galerías automáticas
 ├── mapa.js           → lógica del mapa y de los contadores
 ├── mapa-datos.js     → lugares del mapa (aquí se agregan nuevos)
+├── i18n.js           → botón ES / EN
+├── en.js             → textos en inglés (una clave por cada data-i18n)
 ├── favicon.svg       → ícono de la pestaña
 ├── vista-previa.jpg  → imagen que aparece al compartir el link (1200 × 630)
 └── img/              → una carpeta de fotos por sección
@@ -67,12 +104,20 @@ mi-bitacora/
     ├── cdmx_carrera/
     ├── impresion_3d/
     ├── gimnasio/
-    └── arqueria/
+    ├── arqueria/
+    └── memorias/
+├── herramientas/
+│   └── revisar.py    → revisión automática
+├── docs/
+│   └── arquitectura.svg
+└── .github/          → workflow de la revisión + Dependabot
 ```
 
 ##  Cómo actualizarla
 
-**Agregar fotos:** ponlas en la carpeta de su sección con los nombres `1.jpg`, `2.jpg`, `3.jpg`… y la página las muestra sola. Acepta `.jpg`, `.jpeg`, `.png` y `.webp`. Los pies de foto van en `data-pies="Primero|Segundo|…"` de cada galería, en `index.html`.
+**Agregar fotos:** ponlas en la carpeta de su sección como `1.jpg`, `2.jpg`, `3.jpg`… y actualiza en `index.html` el número de fotos (`data-fotos="N"`) y los pies de foto en español (`data-pies="Primero|Segundo|…"`) e inglés (`data-pies-en`). Antes de subirlas, quítales los metadatos; si se te olvida, la revisión automática te avisa.
+
+**Cambiar un texto:** cambia el español en `index.html` y su versión en inglés en `en.js` (misma clave del `data-i18n`).
 
 **Agregar un lugar al mapa:** en `mapa-datos.js`, copia una línea y cambia el nombre y las coordenadas. El orden de la lista es el orden en que se dibuja la ruta.
 
@@ -97,6 +142,6 @@ No necesita instalar nada: abre `index.html` con doble clic. El mapa necesita co
 
 **Hugo Maldonado** · Estudiante de Ingeniería en Inteligencia Artificial
 
-[GitHub](https://github.com/krma12) · [LinkedIn](https://www.linkedin.com/in/hugo-maldonado-a20445201/) · [Impresiones 3D @vxlmexico](https://www.instagram.com/vxlmexico/)
+[Portfolio](https://hugoportfolio.pythonanywhere.com) · [GitHub](https://github.com/krma12) · [LinkedIn](https://www.linkedin.com/in/hugo-maldonado-a20445201/) · [Impresiones 3D @vxlmexico](https://www.instagram.com/vxlmexico/)
 
 *La bitácora sigue abierta.* ▋

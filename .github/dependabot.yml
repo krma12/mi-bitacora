@@ -1,0 +1,8 @@
+# Dependabot avisa (con un pull request) cuando hay versiones nuevas
+# de las acciones que usa la revisión automática.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
