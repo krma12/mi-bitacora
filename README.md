@@ -39,6 +39,7 @@ Después de la carta está **Memorias**: álbumes de momentos que marcaron el ca
 
 - **Mapa interactivo** ([Leaflet](https://leafletjs.com/)): la ruta CDMX → Caribe → Nueva York → CDMX se dibuja sola, con botones para hacer zoom a cada etapa. Al hacer clic en un lugar, su nota dice si ahí viví, si lo visité o si ahí tengo amigos.
 - **Galerías automáticas**: cada sección lee sus fotos de una carpeta, con un visor para verlas en grande.
+- **Proyectos en vivo**: el capítulo 09 lee la lista de proyectos de la API de mi [portfolio](https://hugoportfolio.pythonanywhere.com); si no responde, muestra la lista guardada.
 - **Versión en inglés**: un botón ES / EN traduce toda la página, sin depender del traductor del navegador.
 - **Contadores animados**: algunos números se calculan solos, como los años, los lugares del mapa y los capítulos.
 - **Menú que sigue tu lectura**: marca el capítulo actual y se oscurece al llegar a la parte de terminal.
@@ -54,7 +55,7 @@ Después de la carta está **Memorias**: álbumes de momentos que marcaron el ca
 
 ![Todo vive en el repositorio; solo el mapa se carga de fuera](docs/arquitectura.svg)
 
-Es un sitio **estático**: no tiene servidor ni base de datos. GitHub Pages publica los archivos tal cual. Lo único que llega de fuera es el mapa (Leaflet y sus teselas) y las tipografías.
+Es un sitio **estático**: no tiene servidor ni base de datos. GitHub Pages publica los archivos tal cual. Lo único que llega de fuera es el mapa (Leaflet y sus teselas), las tipografías y la lista de proyectos, que se lee de la API del portfolio.
 
 ##  Seguridad y privacidad
 
@@ -67,6 +68,7 @@ Es una página muy personal, así que cuida lo que publica:
 | **Sin correo publicado** | El contacto es por LinkedIn o el portfolio; un correo en la página termina en listas de spam. |
 | **Política de seguridad (CSP)** | GitHub Pages no permite configurar encabezados del servidor, así que la CSP va en una etiqueta `<meta>`: solo se ejecutan scripts de este sitio y de cdnjs. |
 | **Huella de los archivos externos (SRI)** | Leaflet lleva `integrity`: si alguien alterara el archivo en el CDN, el navegador no lo carga. |
+| **API del portfolio** | La página solo puede *leer* la lista de proyectos (`connect-src` en la CSP y CORS del lado del portfolio), y la arma con `textContent`: el texto que llega nunca se ejecuta como HTML. |
 | **HTTPS** | GitHub Pages sirve todo por HTTPS. |
 
 ##  Revisión automática
@@ -93,6 +95,7 @@ mi-bitacora/
 ├── mapa-datos.js     → lugares del mapa (aquí se agregan nuevos)
 ├── i18n.js           → botón ES / EN
 ├── en.js             → textos en inglés (una clave por cada data-i18n)
+├── proyectos-vivo.js → lista de proyectos en vivo desde la API del portfolio
 ├── favicon.svg       → ícono de la pestaña
 ├── vista-previa.jpg  → imagen que aparece al compartir el link (1200 × 630)
 └── img/              → una carpeta de fotos por sección

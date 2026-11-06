@@ -175,3 +175,13 @@ if (visor) {
         if (e.target === visor || e.target.closest("button")) visor.close();
     });
 }
+
+
+// 6) Botón "volver al mapa": aparece después de bajar dos pantallas
+(function () {
+    const volver = document.getElementById("volver");
+    if (!volver) return;
+    const revisar = () => { volver.hidden = window.scrollY < window.innerHeight * 2; };
+    window.addEventListener("scroll", revisar, { passive: true });
+    revisar();
+})();

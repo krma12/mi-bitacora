@@ -6,7 +6,7 @@
     <!-- Seguridad: GitHub Pages no deja configurar encabezados del servidor,
          así que la política de contenido (CSP) va aquí. Solo se cargan scripts
          de este sitio y de cdnjs (Leaflet); no hay scripts escritos en la página. -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://server.arcgisonline.com https://tile.openstreetmap.org https://cdnjs.cloudflare.com; media-src 'self'; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://server.arcgisonline.com https://tile.openstreetmap.org https://cdnjs.cloudflare.com; media-src 'self'; connect-src 'self' https://hugoportfolio.pythonanywhere.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="google" content="notranslate">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -55,6 +55,13 @@
             <span>El camino, entrada por entrada.</span>
         </p>
         <a href="#cap-1" class="portada-flecha" data-i18n="portada.3">Abrir el diario ↓</a>
+
+        <!-- Tres etapas del viaje (solo en pantallas grandes) -->
+        <div class="portada-fotos" aria-hidden="true">
+            <figure class="polaroid"><img src="img/veterinaria/2.jpg" alt=""><figcaption>2018</figcaption></figure>
+            <figure class="polaroid"><img src="img/new_york/2.jpg" alt=""><figcaption>2021</figcaption></figure>
+            <figure class="polaroid"><img src="img/cdmx_carrera/1.jpg" alt=""><figcaption data-i18n="portada.4">hoy</figcaption></figure>
+        </div>
     </header>
 
     <!-- ============ ÍNDICE (menú) ============ -->
@@ -73,6 +80,8 @@
         <a href="#memorias" data-i18n="nav.12"><span>✦</span> Memorias</a>
         <a href="#carta" data-i18n="nav.13"><span>✉</span> Carta</a>
     </nav>
+    <!-- Botón flotante para volver al mapa (aparece al bajar; ver script.js) -->
+    <a href="#cap-0" class="volver" id="volver" data-i18n="volver" hidden>↑ Mapa e índice</a>
 
     <main>
 
@@ -752,7 +761,9 @@
                         <li data-i18n="cap-10.5"><span class="ok">[✓]</span> Terminar el 3er cuatrimestre</li>
                         <li data-i18n="cap-10.6"><span class="ok">[✓]</span> Publicar mi portfolio en internet <span class="next">· oct 2026</span></li>
                         <li data-i18n="cap-10.7"><span class="run">[…]</span> Ingeniería en IA</li>
-                        <li data-i18n="cap-10.8"><span class="next">[ ]</span> Certificaciones de ciberseguridad</li>
+                        <li data-i18n="cap-10.8"><span class="run">[…]</span> Certificación ISC2 CC <span class="next">· examen feb 2027</span></li>
+                        <li data-i18n="cap-10.12"><span class="next">[ ]</span> Laboratorio SIEM con Wazuh: detectar los ataques de mi propio lab</li>
+                        <li data-i18n="cap-10.13"><span class="next">[ ]</span> Mi primer trabajo en ciberseguridad (Pentester Jr.) <span class="next">· 2027</span></li>
                         <li data-i18n="cap-10.9"><span class="next">[ ]</span> Certificaciones de idiomas
                             <ol class="sub-roadmap">
                                 <li>Português</li>
@@ -800,6 +811,22 @@
                          data-pies="Curando una quemadura|Atendiendo a otro paciente|Mi primera sutura|Al terminar" data-pies-en="Treating a burn|Helping another patient|My first stitches|When we were done"></div>
                 </article>
 
+                <article class="entrada memoria-grupo">
+                    <p class="entrada-fecha" data-i18n="memorias.9">2 de octubre de 2025</p>
+                    <h3 data-i18n="memorias.10">Fotógrafo de guerra por una noche</h3>
+                    <p data-i18n="memorias.11">La marcha del 2 de octubre en el Zócalo de la Ciudad de México.</p>
+                    <div class="galeria" data-carpeta="img/memorias/marcha-2-octubre" data-fotos="2"
+                         data-pies="Fuego frente a la Catedral|Banderas y humo en el Zócalo" data-pies-en="Fire in front of the Cathedral|Flags and smoke in the Zócalo"></div>
+                </article>
+
+                <article class="entrada memoria-grupo">
+                    <p class="entrada-fecha" data-i18n="memorias.12">25 de marzo de 2026</p>
+                    <h3 data-i18n="memorias.13">Una boda en Cancún</h3>
+                    <p data-i18n="memorias.14">De vuelta al Caribe, esta vez para una boda.</p>
+                    <div class="galeria" data-carpeta="img/memorias/boda-cancun" data-fotos="1"
+                         data-pies="En Cancún" data-pies-en="In Cancún"></div>
+                </article>
+
                 <p class="memorias-vacio" data-i18n="memorias.8">Pronto agregaré más recuerdos aquí.</p>
             </div>
         </section>
@@ -845,6 +872,7 @@
         <button type="button" aria-label="Cerrar">✕</button>
     </dialog>
     <script src="script.js"></script>
+    <script src="proyectos-vivo.js"></script>
 </body>
 
 </html>
