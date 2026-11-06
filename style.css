@@ -556,3 +556,16 @@ body.modo-terminal .volver { background: rgba(33, 38, 45, .92); color: #c9d1d9; 
 
 /* Una sola foto en la galería: tamaño de polaroid, no a todo lo ancho */
 .galeria > .polaroid:only-child { max-width: 320px; }
+
+/* Citas dentro de Memorias (Tolstói, Gibran) */
+.cita {
+    margin: 1.2rem 0 .4rem; padding: .2rem 0 .2rem 1.2rem;
+    border-left: 2px solid var(--acento);
+    font-style: italic; opacity: .92;
+}
+.cita p { margin: 0 0 .5rem; }
+.cita cite {
+    display: block; font-style: normal;
+    font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; opacity: .75;
+}
+.cita cite::before { content: "— "; }
