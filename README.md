@@ -33,7 +33,7 @@ Al final la historia vuelve al papel, con una carta a mi yo de 2018.
 | 10 | Lo que viene | mañana | terminal |
 | ✉ | Carta a mi yo de 2018 | — | papel |
 
-Después de la carta está **Memorias**: álbumes de momentos que marcaron el camino, como mi primera sutura en 2018.
+Antes de la carta está **Memorias**: los 3 álbumes más recientes y un botón a [`memorias.html`](https://krma12.github.io/mi-bitacora/memorias.html), la página con todos los álbumes, un filtro por año y la historia de cada uno.
 
 ##  Qué tiene
 
@@ -80,7 +80,8 @@ En cada push, GitHub Actions corre `herramientas/revisar.py`. Revisa que:
 3. cada texto con `data-i18n` tenga su traducción en `en.js`;
 4. las fotos pesen hasta 700 KB y los videos hasta 6 MB;
 5. ninguna foto traiga GPS o metadatos y ningún archivo publique un correo;
-6. los archivos externos lleven SRI y la página tenga CSP.
+6. los archivos externos lleven SRI y cada página tenga CSP;
+7. cada álbum de `memorias-datos.js` tenga sus datos, fotos y pies en español e inglés.
 
 Si algo falla, el check sale en rojo con la lista de problemas. Para correrla en tu computadora: `pip install pillow` y luego `python herramientas/revisar.py`.
 
@@ -96,6 +97,9 @@ mi-bitacora/
 ├── i18n.js           → botón ES / EN
 ├── en.js             → textos en inglés (una clave por cada data-i18n)
 ├── proyectos-vivo.js → lista de proyectos en vivo desde la API del portfolio
+├── memorias.html     → página de Memorias (cuadrícula, filtro por año y vista de cada álbum)
+├── memorias-datos.js → los álbumes: fecha, título, historia, cita y pies de foto (ES/EN)
+├── memorias.js       → arma los álbumes en memorias.html y el adelanto en index.html
 ├── favicon.svg       → ícono de la pestaña
 ├── vista-previa.jpg  → imagen que aparece al compartir el link (1200 × 630)
 └── img/              → una carpeta de fotos por sección
@@ -119,6 +123,8 @@ mi-bitacora/
 ##  Cómo actualizarla
 
 **Agregar fotos:** ponlas en la carpeta de su sección como `1.jpg`, `2.jpg`, `3.jpg`… y actualiza en `index.html` el número de fotos (`data-fotos="N"`) y los pies de foto en español (`data-pies="Primero|Segundo|…"`) e inglés (`data-pies-en`). Antes de subirlas, quítales los metadatos; si se te olvida, la revisión automática te avisa.
+
+**Agregar un álbum a Memorias:** crea `img/memorias/<nombre>/` con `1.jpg`, `2.jpg`… y agrega un bloque en `memorias-datos.js` (las instrucciones están al inicio del archivo). No hay que tocar el HTML. La revisión automática comprueba que el archivo sea JSON válido y que cada álbum tenga sus fotos, textos y pies en los dos idiomas.
 
 **Cambiar un texto:** cambia el español en `index.html` y su versión en inglés en `en.js` (misma clave del `data-i18n`).
 

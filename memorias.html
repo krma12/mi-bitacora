@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://server.arcgisonline.com https://tile.openstreetmap.org https://cdnjs.cloudflare.com; media-src 'self'; connect-src 'self' https://hugoportfolio.pythonanywhere.com; object-src 'none'; base-uri 'self'; form-action 'none'; upgrade-insecure-requests">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <meta name="google" content="notranslate">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorias · Hugo Maldonado</title>
+    <meta name="description" content="Álbumes de momentos que también son parte del camino.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://krma12.github.io/mi-bitacora/memorias.html">
+    <meta property="og:title" content="Memorias · Hugo Maldonado">
+    <meta property="og:description" content="Álbumes de momentos que también son parte del camino.">
+    <meta property="og:image" content="https://krma12.github.io/mi-bitacora/vista-previa.jpg">
+    <meta name="theme-color" content="#2a2230">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Fraunces:ital,opsz,wght@0,9..144,300..800;1,9..144,300..600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="modo-terminal pagina-memorias">
+
+    <main class="capitulo memorias">
+        <a href="index.html#memorias" class="volver-bitacora" data-i18n="mp.volver">← Volver a la bitácora</a>
+
+        <!-- Cuadrícula de álbumes (se oculta al abrir uno) -->
+        <div id="memorias-portada">
+            <div class="cap-cabecera">
+                <span class="cap-num" data-i18n="memorias.1">Álbum</span>
+                <h1 data-i18n="memorias.2">Memorias</h1>
+                <p class="cap-fecha" data-i18n="memorias.3">Fotos sueltas que también son parte del camino</p>
+            </div>
+            <div class="filtros" id="filtros" role="group" aria-label="Filtrar por año"></div>
+            <div class="album-grid" id="album-grid">
+                <noscript><p>Esta página necesita JavaScript para mostrar los álbumes.</p></noscript>
+            </div>
+        </div>
+
+        <!-- Vista de un álbum (memorias.html#id) -->
+        <article class="album-vista" id="album-vista" hidden>
+            <a href="#" class="volver-bitacora" data-i18n="mp.todas">← Todas las memorias</a>
+            <div class="album-cuerpo"></div>
+        </article>
+    </main>
+
+    <dialog class="visor" id="visor" aria-label="Foto ampliada">
+        <img alt="">
+        <p></p>
+        <button type="button" aria-label="Cerrar">✕</button>
+    </dialog>
+
+    <script src="en.js"></script>
+    <script src="i18n.js"></script>
+    <script src="memorias-datos.js"></script>
+    <script src="memorias.js"></script>
+</body>
+</html>
