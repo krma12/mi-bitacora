@@ -71,6 +71,28 @@ Es una página muy personal, así que cuida lo que publica:
 | **API del portfolio** | La página solo puede *leer* la lista de proyectos (`connect-src` en la CSP y CORS del lado del portfolio), y la arma con `textContent`: el texto que llega nunca se ejecuta como HTML. |
 | **HTTPS** | GitHub Pages sirve todo por HTTPS. |
 
+**Calificación:** [Mozilla HTTP Observatory](https://developer.mozilla.org/en-US/observatory) **B (75/100)**, 10 de 12 pruebas. Es el máximo posible en GitHub Pages: las dos pruebas que faltan (`X-Frame-Options` y `X-Content-Type-Options`) son encabezados del servidor que GitHub Pages no deja configurar, y `frame-ancestors` no funciona dentro de `<meta>`. El riesgo es bajo, porque la página no tiene formularios ni acciones que un clickjacking pudiera aprovechar. Para llegar a A+ haría falta un dominio propio con un proxy (por ejemplo Cloudflare) que agregue esos encabezados.
+
+### Modelo de seguridad: triada CIA y dominios de ISC2 CC
+
+**Triada CIA**
+
+| Principio | Qué significa aquí | Cómo se cumple |
+|---|---|---|
+| **Confidencialidad** | Que la página no revele más de lo que quiero contar | Fotos sin GPS ni metadatos, caras de terceros difuminadas, sin correo publicado, temas muy privados fuera |
+| **Integridad** | Que nadie pueda alterar lo que se muestra | CSP (solo scripts propios y de cdnjs), SRI en Leaflet, texto de la API armado con `textContent`, cambios solo por commits revisados en CI |
+| **Disponibilidad** | Que la página cargue siempre y rápido | Sitio estático en GitHub Pages, fotos de máximo 700 KB, y si el mapa o la API del portfolio fallan, la página sigue funcionando con su versión guardada |
+
+**Dominios de ISC2 Certified in Cybersecurity (CC)**
+
+| Dominio | En esta página |
+|---|---|
+| **1. Principios de seguridad** | CIA y privacidad desde el diseño: se publica lo mínimo, y antes de subir una foto con personas se revisa si dieron permiso |
+| **2. Continuidad y respuesta a incidentes** | Todo vive en git: cualquier versión se puede recuperar. **Incidente real (nov 2026):** se subieron 8 fotos con ubicación GPS. La revisión automática lo **detectó** (check en rojo), se **contuvo** quitando los metadatos, se **erradicó** reescribiendo ese commit para que el GPS no quedara en el historial público, y se **aprendió**: ahora el README explica cómo limpiar las fotos antes de subirlas |
+| **3. Control de acceso** | Sin servidor ni login: solo se puede cambiar con un push a GitHub. La página solo puede *leer* la API del portfolio (CORS y `connect-src` limitados), nunca escribir |
+| **4. Seguridad de red** | HTTPS con HSTS (lo pone GitHub Pages), CSP con orígenes permitidos uno por uno, `upgrade-insecure-requests` y `referrer` estricto |
+| **5. Operaciones de seguridad** | Revisión automática en cada push (`herramientas/revisar.py`): metadatos, peso, enlaces, traducción, CSP y SRI. Dependabot vigila las versiones de las acciones de GitHub. Los originales de las fotos se guardan fuera del repositorio |
+
 ##  Revisión automática
 
 En cada push, GitHub Actions corre `herramientas/revisar.py`. Revisa que:
